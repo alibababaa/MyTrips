@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription - My Trips</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">My Trips</div>
+        <ul>
+            <li><a href="index.html">Accueil</a></li>
+          <li><a href="presentation.html">Présentation</a></li>
+            <li><a href="recherche.html" class="active">Rechercher</a></li>
+            
+            
+            <li><a href="profil.html">Mon Profil</a></li>
+          <li><a href="inqcription.html">S'inscrire</a></li>
+            <li><a href="connexion.html">Se connecter</a></li>
+            <li><a href="admin.html">Admin</a></li>
+            <li><button class="btn-primary">Réserver</button></li>
+        </ul>
+    </nav>
+
+    <!-- Banner -->
+    <header class="banner">
+        <div class="banner-content">
+            <h1>Recherchez votre prochaine aventure</h1>
+            <p>Trouvez votre voyage idéal au Bénin en quelques clics !</p>
+        </div>
+    </header>
+
+    <!-- Section de Recherche -->
+    <section class="search-section">
+        <h2>Filtrez votre recherche</h2>
+        <form>
+            <label for="destination">Destination :</label>
+            <select id="destination">
+                <option value="">Sélectionnez une destination</option>
+                <option value="cotonou">Cotonou</option>
+                <option value="ouidah">Ouidah</option>
+                <option value="porto-novo">Porto-Novo</option>
+            </select>
+
+            <label for="date">Date de départ :</label>
+            <input type="date" id="date">
+
+            <label for="options">Options :</label>
+            <select id="options">
+                <option value="">Toutes les options</option>
+                <option value="hebergement">Hébergement</option>
+                <option value="transport">Transport</option>
+                <option value="activites">Activités</option>
+            </select>
+
+            <button type="submit" class="btn-primary">Rechercher</button>
+        </form>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 My Trips. Tous droits réservés.</p>
+    </footer>
+</body>
+</html>
