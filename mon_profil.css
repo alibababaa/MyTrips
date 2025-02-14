@@ -103,8 +103,8 @@ nav ul li a:hover, .active {
     font-size: 1.2em;
 }
 
-/* Formulaire d'inscription */
-.signup-section {
+/* Section Profil */
+.profile-section {
     max-width: 500px;
     margin: 3em auto;
     padding: 2em;
@@ -114,32 +114,48 @@ nav ul li a:hover, .active {
     text-align: center;
 }
 
-.signup-section h2 {
+.profile-section h2 {
     color: #8b4513;
     margin-bottom: 1em;
 }
 
-.signup-section form {
+.profile-section form {
     display: flex;
     flex-direction: column;
     gap: 1em;
     text-align: left;
 }
 
-.signup-section label {
+.profile-section label {
     font-weight: bold;
     color: #8b4513;
 }
 
-.signup-section input {
+.profile-section input {
     width: 100%;
     padding: 0.8em;
     font-size: 1em;
     border: 1px solid #ddd;
     border-radius: 5px;
+    background-color: #fdf6e3;
+    cursor: not-allowed;
 }
 
-.signup-section button {
+.profile-section .edit-btn {
+    background: none;
+    border: none;
+    font-size: 1.2em;
+    color: #8b4513;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: color 0.3s;
+}
+
+.profile-section .edit-btn:hover {
+    color: #a0522d;
+}
+
+.profile-section button {
     background-color: #8b4513;
     color: white;
     font-size: 1.1em;
@@ -150,24 +166,28 @@ nav ul li a:hover, .active {
     transition: background 0.3s;
 }
 
-.signup-section button:hover {
+.profile-section button:hover {
     background-color: #a0522d;
 }
 
-.login-link {
-    margin-top: 1em;
-    font-size: 0.9em;
+/* Mot de passe oublié */
+.forgot-password {
+    text-align: left;
+    margin-top: 10px;
 }
 
-.login-link a {
+.forgot-password a {
     color: #8b4513;
     text-decoration: none;
     font-weight: bold;
+    transition: color 0.3s;
 }
 
-.login-link a:hover {
+.forgot-password a:hover {
+    color: #fdd835;
     text-decoration: underline;
 }
+
 
 /* Footer */
 footer {
