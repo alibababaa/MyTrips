@@ -19,9 +19,10 @@
             <li><a href="recherche.html">Rechercher</a></li>
             
             
-            <li><a href="profil.html">Mon Profil</a></li>
-            <li><a href="page4.html">S'inscrire</a></li>
+            <li><a href="profil.html" class="active">Mon Profil</a></li>
+           <li><a href="page4.html">S'inscrire</a></li>
             <li><a href="page5.html">Se connecter</a></li>
+
             <li><a href="admin.html">Admin</a></li>
             <li><button class="btn-primary">Réserver</button></li>
         </ul>
@@ -30,32 +31,32 @@
     <!-- Banner -->
     <header class="banner">
         <div class="banner-content">
-            <h1>Rejoignez-nous dès aujourd'hui</h1>
-            <p>Créez un compte pour accéder à nos offres exclusives.</p>
+            <h1>Votre Profil</h1>
+            <p>Gérez vos informations personnelles et vos préférences.</p>
         </div>
     </header>
 
-    <!-- Formulaire d'inscription -->
-    <section class="signup-section">
-        <h2>Inscription</h2>
+    <!-- Section Profil -->
+    <section class="profile-section">
+        <h2>Informations du Profil</h2>
         <form>
             <label for="name">Nom :</label>
-            <input type="text" id="name" placeholder="Votre nom complet" required>
+            <input type="text" id="name" placeholder="Votre nom" required>
+
+           
 
             <label for="email">Email :</label>
             <input type="email" id="email" placeholder="Votre email" required>
+            
 
             <label for="password">Mot de passe :</label>
-            <input type="password" id="password" placeholder="Créer un mot de passe" required>
+            <input type="password" id="password" placeholder="Modifiez votre mdp mot de passe" required>
+ 
+            <p class="forgot-password"><a href="reset-password.html">Mot de passe oublié ?</a></p>
 
-            <label for="confirm-password">Confirmer le mot de passe :</label>
-            <input type="password" id="confirm-password" placeholder="Confirmez votre mot de passe" required>
-
-            <button type="submit" class="btn-primary">S'inscrire</button>
+            <button type="submit" class="btn-primary">Enregistrer les modifications</button>
         </form>
-        <p class="login-link">Déjà un compte ? <a href="login.html">Connectez-vous ici</a></p>
     </section>
-
     <!-- Footer -->
     <footer>
         <p>&copy; 2025 My Trips. Tous droits réservés.</p>
