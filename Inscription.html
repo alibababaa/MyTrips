@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription - My Trips</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">My Trips</div>
+        <ul>
+            <li><a href="index.html">Accueil</a></li>
+          <li><a href="presentation.html">Présentation</a></li>
+            <li><a href="recherche.html">Rechercher</a></li>
+            
+            
+            <li><a href="profil.html" class="active">Mon Profil</a></li>
+            <li><a href="page4.html">S'inscrire</a></li>
+            <li><a href="page5.html">Se connecter</a></li>
+            <li><a href="admin.html">Admin</a></li>
+            <li><button class="btn-primary">Réserver</button></li>
+        </ul>
+    </nav>
+
+    <!-- Banner -->
+    <header class="banner">
+        <div class="banner-content">
+            <h1>Rejoignez-nous dès aujourd'hui</h1>
+            <p>Créez un compte pour accéder à nos offres exclusives.</p>
+        </div>
+    </header>
+
+    <!-- Formulaire d'inscription -->
+    <section class="signup-section">
+        <h2>Inscription</h2>
+        <form>
+            <label for="name">Nom :</label>
+            <input type="text" id="name" placeholder="Votre nom complet" required>
+
+            <label for="email">Email :</label>
+            <input type="email" id="email" placeholder="Votre email" required>
+
+            <label for="password">Mot de passe :</label>
+            <input type="password" id="password" placeholder="Créer un mot de passe" required>
+
+            <label for="confirm-password">Confirmer le mot de passe :</label>
+            <input type="password" id="confirm-password" placeholder="Confirmez votre mot de passe" required>
+
+            <button type="submit" class="btn-primary">S'inscrire</button>
+        </form>
+        <p class="login-link">Déjà un compte ? <a href="login.html">Connectez-vous ici</a></p>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 My Trips. Tous droits réservés.</p>
+    </footer>
+</body>
+</html>
