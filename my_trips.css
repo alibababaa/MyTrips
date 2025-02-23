@@ -894,8 +894,8 @@ nav ul li a:hover, .active {
     font-size: 1em;
     border: 1px solid #ddd;
     border-radius: 5px;
-    background-color: #fdf6e3;
-    cursor: not-allowed;
+    background-color: white;
+    cursor: text;
 }
 
 .profile-section .edit-btn {
