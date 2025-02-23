@@ -8,54 +8,117 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap" rel="stylesheet"> 
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        .destinations {
+            display: none;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 3em 2em;
+            background-color: white;
+        }
+        .destination-card {
+            width: 250px;
+            text-align: center;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        .destination-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+        .destination-card h3 {
+            padding: 10px;
+            background-color: #8b4513;
+            color: white;
+            margin: 0;
+        }
+        .destination-card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
 </head>
 <body>
-    <!-- Navigation -->
     <nav>
-        <div class="logo">My Trips</div>
+        <div class="logo">
+            <img src="logo_my_trips_cleaned_v2.png" alt="My Trips Logo">
+        </div>
+        
         <ul>
             <li><a href="accueil.html" class="active">Accueil</a></li>
-          <li><a href="présentation.html" >Présentation</a></li>
+            <li><a href="présentation.html">Présentation</a></li>
             <li><a href="rechercher.html">Rechercher</a></li>
             <li><a href="mon_profil.html">Mon Profil</a></li>
-          <li><a href="inscription.html">S'inscrire</a></li>
+            <li><a href="inscription.html">S'inscrire</a></li>
             <li><a href="connexion.html">Se connecter</a></li>
             <li><a href="admin.html">Admin</a></li>
             <li><a href="reserver.html" class="btn-primary">Réserver</a></li>
         </ul>
     </nav>
 
-    <!-- Banner -->
     <header class="banner">
         <div class="banner-content">
             <h1>Explorez le Bénin autrement</h1>
             <p>Des voyages authentiques et sur mesure !</p>
-            <button class="btn-secondary">Voir les destinations</button>
+            <button class="btn-secondary" onclick="afficherDestinations()">Voir les destinations</button>
         </div>
     </header>
 
-    <!-- Sections -->
-    <section class="sections">
-        <div class="card">
-            <i class="fas fa-map-marked-alt"></i>
-            <h2>Destinations</h2>
-            <p>Explorez nos offres de voyages au Bénin.</p>
+    <section class="destinations" id="destinations">
+        <div class="destination-card">
+            <img src="https://www.les-covoyageurs.com/ressources/images-lieux/450-visiter-porto-novo-benin.jpg" alt="Porto-Novo">
+            <h3>Porto-Novo</h3>
         </div>
-        <div class="card">
-            <i class="fas fa-users"></i>
-            <h2>À propos</h2>
-            <p>Apprenez-en plus sur My Trips et notre mission.</p>
+        <div class="destination-card">
+            <img src="https://geoconfluences.ens-lyon.fr/images/image-a-la-une/img-rieucau/doc-3-la-porte-du-non-retour.jpg" alt="Ouidah">
+            <h3>Ouidah</h3>
         </div>
-        <div class="card">
-            <i class="fas fa-newspaper"></i>
-            <h2>Blog</h2>
-            <p>Découvrez les dernières actualités et conseils de voyage.</p>
+        <div class="destination-card">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/d/dd/Abomey-Königspalast2.jpg" alt="Abomey">
+            <h3>Abomey</h3>
+        </div>
+        <div class="destination-card">
+            <img src="https://www.build-green.fr/wp-content/uploads/2023/06/village-flottant-ganvie-benin_03.jpg" alt="Ganvié">
+            <h3>Ganvié</h3>
+        </div>
+        <div class="destination-card">
+            <img src="https://www.gouv.bj/upload/thumbnails/articles//0548016001606546234.png" alt="Grand Popo">
+            <h3>Grand Popo</h3>
+        </div>
+        <div class="destination-card">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/2/21/La_colombe_18.jpg" alt="Parakou">
+            <h3>Parakou</h3>
+        </div>
+        <div class="destination-card">
+            <img src="https://www.gouv.bj/upload/thumbnails/articles//0952356001605489551.jpeg" alt="Natitingou">
+            <h3>Natitingou</h3>
+        </div>
+        <div class="destination-card">
+            <img src="https://expatstraveltogether.com/wp-content/uploads/2023/09/DIG16_view-hills-city-dassazoume-benin-450w-1301045479-scaled-1.jpg" alt="Dassa">
+            <h3>Dassa</h3>
+        </div>
+        <div class="destination-card">
+            <img src="https://cenozo.org/wp-content/uploads/2021/03/Entree-du-Parc-National-de-la-Pendjari-a-Batia.jpg" alt="Tanguiéta">
+            <h3>Tanguiéta</h3>
+        </div>
+        <div class="destination-card">
+            <img src="https://www.ecobenin.org/wp-content/uploads/Possotome_cocotier_plage_chez_prefet_pilotis_lac_aheme_ecotourisme_ecobenin_benin.jpg" alt="Possotomé">
+            <h3>Possotomé</h3>
         </div>
     </section>
 
-    <!-- Footer -->
     <footer>
         <p>&copy; 2025 My Trips. Tous droits réservés.</p>
     </footer>
+
+    <script>
+        function afficherDestinations() {
+            document.getElementById('destinations').style.display = 'flex';
+            window.scrollTo({ top: document.getElementById('destinations').offsetTop, behavior: 'smooth' });
+        }
+    </script>
 </body>
 </html>
