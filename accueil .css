@@ -24,7 +24,7 @@ nav {
 
 nav 
     .logo img {
-        height: 60px; /* Ajuste la taille selon ton besoin */
+        height: 60px; 
         width: auto;
         display: block;
     }
