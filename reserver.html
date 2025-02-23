@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Réservation - My Trips</title>
+    <link rel="stylesheet" href="my_trips.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">My Trips</div>
+        <ul>
+            <li><a href="acceuil.html">Accueil</a></li>
+            <li><a href="présentation.html">Présentation</a></li>
+            <li><a href="rechercher.html">Rechercher</a></li>
+            <li><a href="mon_profil.html">Mon Profil</a></li>
+            <li><a href="Inscription.html">S'inscrire</a></li>
+            <li><a href="connexion.html">Se connecter</a></li>
+            <li><a href="admin.html">Admin</a></li>
+            <li><a href="reservation.html" class="active">Réserver</a></li>
+        </ul>
+    </nav>
+    
+    <!-- Banner -->
+    <header class="banner">
+        <div class="banner-content">
+            <h1>Réservez votre voyage</h1>
+            <p>Planifiez votre séjour au Bénin en quelques clics.</p>
+        </div>
+    </header>
+
+    <!-- Section Réservation -->
+    <section class="reservation-section">
+        <h2>Formulaire de Réservation</h2>
+        <form>
+            <label for="destination">Destination :</label>
+            <select id="destination" required>
+                <option value="">Sélectionnez une destination</option>
+                <option value="cotonou">Cotonou</option>
+                <option value="ouidah">Ouidah</option>
+                <option value="porto-novo">Porto-Novo</option>
+		<option value="savè">Savè</option>
+		<option value="ganvié">Ganvié</option>
+		<option value="dassa">Dassa</option>
+		<option value="pandjari">Parc pandjari</option>
+		<option value="abomey">Abomey</option>
+            </select>
+
+            <label for="date">Date de départ :</label>
+            <input type="date" id="date" required>
+
+            <label for="personnes">Nombre de personnes :</label>
+            <input type="number" id="personnes" min="1" max="10" required>
+
+            <button type="submit" class="btn-primary">Réserver</button>
+        </form>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 My Trips. Tous droits réservés.</p>
+    </footer>
+</body>
+</html>
