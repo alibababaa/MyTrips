@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -7,22 +8,20 @@
     <link rel="stylesheet" href="my_trips.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <!-- Navigation -->
     <nav>
-        <div class="logo">My Trips</div>
+        <div class="logo"><img src="logo_my_trips.png" alt="My Trips Logo"></div>
         <ul>
-		
-            <li><a href="acceuil.html">Accueil</a></li>
+            <li><a href="accueil.html">Accueil</a></li>
             <li><a href="présentation.html">Présentation</a></li>
             <li><a href="rechercher.html">Rechercher</a></li>
             <li><a href="mon_profil.html">Mon Profil</a></li>
-            <li><a href="Inscription.html">S'inscrire</a></li>
+            <li><a href="inscription.html">S'inscrire</a></li>
             <li><a href="connexion.html">Se connecter</a></li>
             <li><a href="admin.html">Admin</a></li>
-            <li><a href="reservation.html" class="active">Réserver</a></li>
+            <li><a href="reserver.html" class="active">Réserver</a></li>
         </ul>
     </nav>
     
@@ -34,23 +33,23 @@
         </div>
     </header>
 
-    <!-- Section Réservation -->
-    <section class="reservation-section">
-        <h2>Formulaire de Réservation</h2>
+    <!-- Formulaire de réservation homogénéisé -->
+    <section class="reservation-section signup-section">
+        <h2>Réservation</h2>
         <form>
             <label for="destination">Destination :</label>
             <select id="destination" required>
                 <option value="">Sélectionnez une destination</option>
-                <option value="possotomé">Possotomé</option>
                 <option value="ouidah">Ouidah</option>
                 <option value="porto-novo">Porto-Novo</option>
-		<option value="savè">Savè</option>
-		<option value="ganvié">Ganvié</option>
-		<option value="dassa">Dassa</option>
-		<option value="tanguiéta">Tanguiéta</option>
-		<option value="abomey">Abomey</option>
-		<option value="grand-popo">Grand-popo</option>
-		<option value="parakou">Parakou</option>
+                <option value="abomey">Abomey</option>
+                <option value="ganvie">Ganvié</option>
+                <option value="grand-popo">Grand Popo</option>
+                <option value="parakou">Parakou</option>
+                <option value="natitingou">Natitingou</option>
+                <option value="dassa">Dassa</option>
+                <option value="tanguieta">Tanguieta</option>
+                <option value="possotome">Possotomé</option>
             </select>
 
             <label for="date">Date de départ :</label>
