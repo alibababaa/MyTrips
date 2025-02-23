@@ -1,12 +1,4 @@
-/* Styles généraux */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-}
-
-/*acceuil*/
+/* accueil */
 /* Reset */
 body, h1, h2, p, ul, li, button {
     margin: 0;
@@ -31,10 +23,20 @@ nav {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-nav .logo {
-    font-size: 1.8em;
-    font-weight: bold;
-}
+nav 
+    .logo img {
+        height: 60px; 
+        width: auto;
+        display: block;
+    }
+nav 
+    .logo{
+        display: flex;
+        align-items: center;
+    }
+        
+    
+
 
 nav ul {
     list-style: none;
@@ -53,10 +55,9 @@ nav ul li a {
     transition: color 0.3s;
 }
 
-nav ul li a:hover, .active{
+nav ul li a:hover, .active {
     color: #fdd835;
 }
-
 
 .btn-primary {
     background-color: #fdd835;
@@ -126,42 +127,39 @@ nav ul li a:hover, .active{
     background-color: #fdd835;
 }
 
-/* Sections */
-.sections {
-    display: flex;
-    justify-content: space-around;
+/* Destinations */
+.destinations {
+    display: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
     padding: 3em 2em;
     background-color: white;
 }
 
-.card {
-    flex: 1;
-    padding: 2em;
-    background: #fdf6e3;
+.destination-card {
+    width: 250px;
     text-align: center;
     border-radius: 10px;
+    overflow: hidden;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s;
 }
 
-.card i {
-    font-size: 3em;
-    color: #8b4513;
+.destination-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
 }
 
-.card h2 {
-    margin-top: 15px;
-    font-size: 1.5em;
-    color: #8b4513;
+.destination-card h3 {
+    padding: 10px;
+    background-color: #8b4513;
+    color: white;
+    margin: 0;
 }
 
-.card p {
-    margin-top: 10px;
-    font-size: 1em;
-    color: #333;
-}
-
-.card:hover {
+.destination-card:hover {
     transform: translateY(-5px);
 }
 
@@ -1210,8 +1208,8 @@ nav ul li a:hover, .active {
 
 /* Banner */
 .banner {
-    background: url('your-image-url.jpg') no-repeat center center/cover;
-    height: 450px;
+    background: url(https://live.staticflickr.com/65535/52820747398_fc50b32083.jpg) no-repeat center center/cover;
+    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1305,3 +1303,4 @@ footer {
     font-size: 0.9em;
     margin-top: 3em;
 }
+
