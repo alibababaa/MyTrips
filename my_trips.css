@@ -25,7 +25,7 @@ nav {
 
 nav 
     .logo img {
-        height: 60px; 
+        height: 80px; 
         width: auto;
         display: block;
     }
@@ -77,7 +77,7 @@ nav ul li a:hover, .active {
 /* Banner */
 .banner {
     background: url('your-image-url.jpg') no-repeat center center/cover;
-    height: 450px;
+    height: 250px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -246,7 +246,7 @@ nav ul li a:hover, .active {
 /* Banner */
 .banner {
     background: url('your-image-url.jpg') no-repeat center center/cover;
-    height: 450px;
+    height: 250px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -445,7 +445,7 @@ nav ul li a:hover, .active {
 /* Banner */
 .banner {
     background: url('your-image-url.jpg') no-repeat center center/cover;
-    height: 450px;
+    height: 250px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -645,7 +645,7 @@ nav ul li a:hover, .active {
 /* Banner */
 .banner {
     background: url('your-image-url.jpg') no-repeat center center/cover;
-    height: 450px;
+    height: 250px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -826,7 +826,7 @@ nav ul li a:hover, .active {
 /* Banner */
 .banner {
     background: url('your-image-url.jpg') no-repeat center center/cover;
-    height: 450px;
+    height: 250px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1027,7 +1027,7 @@ nav ul li a:hover, .active {
 /* Banner */
 .banner {
     background: url('your-image-url.jpg') no-repeat center center/cover;
-    height: 450px;
+    height: 250px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1304,3 +1304,36 @@ footer {
     margin-top: 3em;
 }
 
+
+/* Styles déplacés depuis accueil.html */
+
+.destinations {
+    display: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 3em 2em;
+    background-color: white;
+}
+.destination-card {
+    width: 250px;
+    text-align: center;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+}
+.destination-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+.destination-card h3 {
+    padding: 10px;
+    background-color: #8b4513;
+    color: white;
+    margin: 0;
+}
+.destination-card:hover {
+    transform: translateY(-5px);
+}
