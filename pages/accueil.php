@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -16,29 +20,39 @@
     </div>
     <ul>
       <li>
-        <a class="active" href="accueil.html">Accueil</a>
+        <a class="active" href="accueil.php">Accueil</a>
       </li>
       <li>
-        <a href="présentation.html">Présentation</a>
+        <a href="présentation.php">Présentation</a>
       </li>
       <li>
-        <a href="rechercher.html">Rechercher</a>
+        <a href="rechercher.php">Rechercher</a>
       </li>
       <li>
-        <a href="mon_profil.html">Mon Profil</a>
+        <a href="mon_profil.php">Mon Profil</a>
       </li>
-      <li>
-        <a href="inscription.html">S'inscrire</a>
-      </li>
-      <li>
-        <a href="connexion.html">Se connecter</a>
-      </li>
+      <?php if (isset($_SESSION['user'])): ?>
+        <li>
+          <a href="mon_profil.php">Mon Profil</a>
+        </li>
+        <li>
+          <a href="deconnexion.php">Se déconnecter</a>
+        </li>
+      <?php else: ?>
+        <li>
+          <a href="inscription.php">S'inscrire</a>
+        </li>
+        <li>
+          <a href="connexion.php">Se connecter</a>
+        </li>
+      <?php endif; ?>
      
       <li>
-        <a class="btn-primary" href="reserver.html">Réserver</a>
+        <a class="btn-primary" href="reserver.php">Réserver</a>
       </li>
     </ul>
   </nav>
+
   <header class="banner">
     <div class="banner-content">
       <h1>Explorez le Bénin autrement</h1>
@@ -46,6 +60,7 @@
       <button class="btn-secondary">Voir les destinations</button>
     </div>
   </header>
+
   <section class="destinations" id="destinations" style="display:flex;">
     <div class="destination-card">
       <img alt="Porto-Novo" src="https://www.les-covoyageurs.com/ressources/images-lieux/450-visiter-porto-novo-benin.jpg"/>
@@ -88,6 +103,7 @@
       <h3>Possotomé</h3>
     </div>
   </section>
+
   <footer>
     <p>
       © 2025 My Trips. Tous droits réservés.
