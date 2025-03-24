@@ -1,18 +1,15 @@
-CREATE DATABASE IF NOT EXISTS mytrips_db
-  CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+<?php
+// db_connect.php
 
-USE mytrips_db;
+$host = 'localhost';
+$dbname = 'nom_de_ta_base';
+$username = 'root';
+$password = '';
 
--- Table pour les destinations
-CREATE TABLE IF NOT EXISTS destinations (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(100) NOT NULL,
-  description TEXT NOT NULL
-);
-
--- (Optionnel) Table pour gérer les utilisateurs/admins
--- CREATE TABLE IF NOT EXISTS users (
---   id INT AUTO_INCREMENT PRIMARY KEY,
---   username VARCHAR(50) NOT NULL,
---   password VARCHAR(255) NOT NULL
--- );
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
+    // Options pour activer les exceptions et une gestion stricte
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Erreur de connexion : " . $e->getMessage());
+}
