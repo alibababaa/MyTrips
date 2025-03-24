@@ -1,28 +1,15 @@
 <?php
 session_start();
+
+// Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['user'])) {
-    header('Location: connexion.php');  // Redirige vers la page de connexion si l'utilisateur n'est pas connecté
+    header('Location: connexion.php');  // Si non connecté, rediriger vers la page de connexion
     exit;
 }
 
-// Charger les informations de l'utilisateur
-$user = $_SESSION['user'];
-
-// Charger les réservations de l'utilisateur
-function loadReservations() {
-    $file = '../data/reservations.json';
-    if (!file_exists($file)) {
-        return [];
-    }
-    return json_decode(file_get_contents($file), true);
-}
-
-$reservations = loadReservations();
-
-// Filtrer les réservations de l'utilisateur
-$userReservations = array_filter($reservations, function($reservation) use ($user) {
-    return $reservation['user'] == $user['login'];
-});
+// Charger les voyages de l'utilisateur depuis un fichier ou base de données
+$userId = $_SESSION['user']['login'];  // Identifiant de l'utilisateur connecté
+$trips = loadUserTrips($userId);  // Fonction à définir pour charger les voyages de l'utilisateur
 ?>
 
 <!DOCTYPE html>
@@ -34,49 +21,39 @@ $userReservations = array_filter($reservations, function($reservation) use ($use
     <link href="my_trips.css" rel="stylesheet"/>
 </head>
 <body>
-  <nav>
-    <!-- Menu Navigation -->
-    <ul>
-        <li><a href="accueil.php">Accueil</a></li>
-        <li><a href="présentation.php">Présentation</a></li>
-        <li><a href="rechercher.php">Rechercher</a></li>
-        <li><a href="mon_profil.php">Mon Profil</a></li>
-        <?php if (isset($_SESSION['user'])): ?>
-            <li><a href="deconnexion.php">Se déconnecter</a></li>
-        <?php else: ?>
-            <li><a href="inscription.php">S'inscrire</a></li>
-            <li><a href="connexion.php">Se connecter</a></li>
-        <?php endif; ?>
-    </ul>
-  </nav>
-
-  <header>
-    <h1>Bienvenue, <?php echo htmlspecialchars($user['name']); ?>!</h1>
-  </header>
-
-  <section class="user-profile">
-    <h2>Informations personnelles</h2>
-    <p><strong>Nom:</strong> <?php echo htmlspecialchars($user['name']); ?></p>
-    <p><strong>Login:</strong> <?php echo htmlspecialchars($user['login']); ?></p>
-    <!-- Vous pouvez ajouter des options pour modifier les informations du profil -->
-
-    <h2>Mes Réservations</h2>
-    <?php if (count($userReservations) > 0): ?>
+    <nav>
         <ul>
-        <?php foreach ($userReservations as $reservation): ?>
-            <li>
-                <p><strong>Voyage ID:</strong> <?php echo $reservation['trip_id']; ?></p>
-                <p><strong>Date de réservation:</strong> <?php echo $reservation['date']; ?></p>
-            </li>
-        <?php endforeach; ?>
+            <li><a href="accueil.php">Accueil</a></li>
+            <li><a href="présentation.php">Présentation</a></li>
+            <li><a href="rechercher.php">Rechercher</a></li>
+            <li><a class="active" href="mon_profil.php">Mon Profil</a></li>
+            <li><a href="deconnexion.php">Se déconnecter</a></li>
         </ul>
-    <?php else: ?>
-        <p>Aucune réservation trouvée.</p>
-    <?php endif; ?>
-  </section>
+    </nav>
 
-  <footer>
-    <p>© 2025 My Trips. Tous droits réservés.</p>
-  </footer>
+    <header>
+        <h1>Bienvenue, <?php echo htmlspecialchars($_SESSION['user']['prenom']); ?></h1>
+    </header>
+
+    <section class="user-trips">
+        <h2>Mes Voyages Payés</h2>
+        <?php if (empty($trips)): ?>
+            <p>Vous n'avez pas encore réservé de voyage.</p>
+        <?php else: ?>
+            <ul>
+                <?php foreach ($trips as $trip): ?>
+                    <li>
+                        <a href="details_voyage.php?trip_id=<?php echo $trip['id']; ?>">
+                            <?php echo htmlspecialchars($trip['titre']); ?> (<?php echo htmlspecialchars($trip['date_debut']); ?> - <?php echo htmlspecialchars($trip['date_fin']); ?>)
+                        </a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        <?php endif; ?>
+    </section>
+
+    <footer>
+        <p>© 2025 My Trips. Tous droits réservés.</p>
+    </footer>
 </body>
 </html>
