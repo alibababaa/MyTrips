@@ -1,152 +1,82 @@
 <?php
 session_start();
-
-// Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['user'])) {
-    // Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
-    header('Location: connexion.php');
+    header('Location: connexion.php');  // Redirige vers la page de connexion si l'utilisateur n'est pas connecté
     exit;
 }
 
-// Variables pour afficher les données de l'utilisateur
-$name = isset($_SESSION['user']) ? $_SESSION['user'] : '';
-$email = isset($_SESSION['email']) ? $_SESSION['email'] : '';
+// Charger les informations de l'utilisateur
+$user = $_SESSION['user'];
 
-// Vérification de la soumission du formulaire pour mettre à jour les informations
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Récupérer les données du formulaire
-    $new_name = $_POST['name'];
-    $new_email = $_POST['email'];
-    $new_password = $_POST['password'];
-
-    // Validation des données
-    if (empty($new_name) || empty($new_email) || empty($new_password)) {
-        $error_message = "Tous les champs doivent être remplis.";
-    } else {
-        // Simuler la mise à jour des informations (à adapter avec une base de données)
-        $_SESSION['user'] = $new_name;
-        $_SESSION['email'] = $new_email;
-        // Vous pouvez ajouter ici un code pour mettre à jour le mot de passe dans une base de données après un hachage avec `password_hash()`
-
-        $success_message = "Informations mises à jour avec succès.";
+// Charger les réservations de l'utilisateur
+function loadReservations() {
+    $file = '../data/reservations.json';
+    if (!file_exists($file)) {
+        return [];
     }
+    return json_decode(file_get_contents($file), true);
 }
+
+$reservations = loadReservations();
+
+// Filtrer les réservations de l'utilisateur
+$userReservations = array_filter($reservations, function($reservation) use ($user) {
+    return $reservation['user'] == $user['login'];
+});
 ?>
 
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>Profil - My Trips</title>
-  <link href="my_trips.css" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com" rel="preconnect"/>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&amp;display=swap" rel="stylesheet"/>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Mon Profil - My Trips</title>
+    <link href="my_trips.css" rel="stylesheet"/>
 </head>
 <body>
-  
-<!-- Navigation -->
-<nav>
-  <div class="logo"><img alt="My Trips Logo" src="logo_my_trips.png"/></div>
-  <ul>
-    <li><a href="accueil.php">Accueil</a></li>
-    <li><a href="présentation.php">Présentation</a></li>
-    <li><a href="rechercher.php">Rechercher</a></li>
-    <li><a class="active" href="profil.php">Mon Profil</a></li>
-    <li><a href="inscription.php">S'inscrire</a></li>
-    <li><a href="connexion.php">Se connecter</a></li>
-    <li><a class="btn-primary" href="reserver.php">Réserver</a></li>
-  </ul>
-</nav>
-  
-<!-- Banner -->
-<header class="banner">
-  <div class="banner-content">
-    <h1>Votre Profil</h1>
-    <p>Gérez vos informations personnelles et vos préférences.</p>
-  </div>
-</header>
-  
-<!-- Section Profil -->
-<section class="profile-section">
-  <h2>Informations du Profil</h2>
+  <nav>
+    <!-- Menu Navigation -->
+    <ul>
+        <li><a href="accueil.php">Accueil</a></li>
+        <li><a href="présentation.php">Présentation</a></li>
+        <li><a href="rechercher.php">Rechercher</a></li>
+        <li><a href="mon_profil.php">Mon Profil</a></li>
+        <?php if (isset($_SESSION['user'])): ?>
+            <li><a href="deconnexion.php">Se déconnecter</a></li>
+        <?php else: ?>
+            <li><a href="inscription.php">S'inscrire</a></li>
+            <li><a href="connexion.php">Se connecter</a></li>
+        <?php endif; ?>
+    </ul>
+  </nav>
 
-  <?php if (isset($error_message)): ?>
-    <p style="color: red;"><?php echo $error_message; ?></p>
-  <?php endif; ?>
-  <!DOCTYPE html>
+  <header>
+    <h1>Bienvenue, <?php echo htmlspecialchars($user['name']); ?>!</h1>
+  </header>
 
-<html lang="fr">
-<head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>Profil - My Trips</title>
-  <link href="my_trips.css" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com" rel="preconnect"/>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&amp;display=swap" rel="stylesheet"/>
-</head>
-<body>
-  
-<!-- Navigation -->
-<nav>
-  <div class="logo"><img alt="My Trips Logo" src="logo_my_trips.png"/></div>
-  <ul>
-    <li><a href="accueil.html">Accueil</a></li>
-    <li><a href="présentation.html">Présentation</a></li>
-    <li><a href="rechercher.html">Rechercher</a></li>
-    <li><a class="active" href="mon_profil.html">Mon Profil</a></li>
-    <li><a href="inscription.html">S'inscrire</a></li>
-    <li><a href="connexion.html">Se connecter</a></li>
-    <li><a class="btn-primary" href="reserver.html">Réserver</a></li>
-  </ul>
-</nav>
-  
-<!-- Banner -->
-<header class="banner">
-  <div class="banner-content">
-    <h1>Votre Profil</h1>
-    <p>Gérez vos informations personnelles et vos préférences.</p>
-  </div>
-</header>
-  
-<!-- Section Profil -->
-<section class="profile-section">
-  <h2>Informations du Profil</h2>
-  <form>
-    <label for="name">Nom :</label>
-    <input id="name" placeholder="Votre nom" required="" type="text"/>
-    <label for="email">Email :</label>
-    <input id="email" placeholder="Votre email" required="" type="email"/>
-    <label for="password">Mot de passe :</label>
-    <input id="password" placeholder="Modifiez votre mot de passe" required="" type="password"/>
-    <p class="forgot-password"><a href="reset-password.html">Mot de passe oublié ?</a></p>
-    <button class="btn-primary" type="submit">Enregistrer les modifica
-  <?php if (isset($success_message)): ?>
-    <p style="color: green;"><?php echo $success_message; ?></p>
-  <?php endif; ?>
+  <section class="user-profile">
+    <h2>Informations personnelles</h2>
+    <p><strong>Nom:</strong> <?php echo htmlspecialchars($user['name']); ?></p>
+    <p><strong>Login:</strong> <?php echo htmlspecialchars($user['login']); ?></p>
+    <!-- Vous pouvez ajouter des options pour modifier les informations du profil -->
 
-  <form method="POST" action="profil.php">
-    <label for="name">Nom :</label>
-    <input id="name" name="name" value="<?php echo htmlspecialchars($name); ?>" required="" type="text"/>
-    
-    <label for="email">Email :</label>
-    <input id="email" name="email" value="<?php echo htmlspecialchars($email); ?>" required="" type="email"/>
-    
-    <label for="password">Mot de passe :</label>
-    <input id="password" name="password" placeholder="Modifiez votre mot de passe" required="" type="password"/>
-    
-    <button class="btn-primary" type="submit">Enregistrer les modifications</button>
-  </form>
-</section>
-  
-<!-- Footer -->
-<footer>
-  <p>© 2025 My Trips. Tous droits réservés.</p>
-</footer>
-</body>
-</html>
+    <h2>Mes Réservations</h2>
+    <?php if (count($userReservations) > 0): ?>
+        <ul>
+        <?php foreach ($userReservations as $reservation): ?>
+            <li>
+                <p><strong>Voyage ID:</strong> <?php echo $reservation['trip_id']; ?></p>
+                <p><strong>Date de réservation:</strong> <?php echo $reservation['date']; ?></p>
+            </li>
+        <?php endforeach; ?>
+        </ul>
+    <?php else: ?>
+        <p>Aucune réservation trouvée.</p>
+    <?php endif; ?>
+  </section>
 
-  <p>© 2025 My Trips. Tous droits réservés.</p>
-</footer>
+  <footer>
+    <p>© 2025 My Trips. Tous droits réservés.</p>
+  </footer>
 </body>
 </html>
