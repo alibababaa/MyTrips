@@ -1,105 +1,90 @@
-<?php
-// Exemple de session démarrée pour gérer les utilisateurs
-session_start();
 
-// Si le formulaire a été soumis, récupérer les données
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $destination = $_POST['destination'];
-    $date_depart = $_POST['date'];
-    $nombre_personnes = $_POST['personnes'];
-    
-    // Validation basique
-    if (!empty($destination) && !empty($date_depart) && !empty($nombre_personnes)) {
-        // Vous pouvez ici ajouter du code pour enregistrer la réservation dans une base de données ou effectuer d'autres actions
-        $_SESSION['reservation'] = [
-            'destination' => $destination,
-            'date_depart' => $date_depart,
-            'nombre_personnes' => $nombre_personnes
-        ];
-        
-        // Rediriger vers une page de confirmation (par exemple)
-        header("Location: confirmation.php");
-        exit;
-    } else {
-        $message_erreur = "Veuillez remplir tous les champs.";
+          <?php
+session_start();
+if (!isset($_SESSION['user'])) {
+    header('Location: connexion.php');  // Redirige l'utilisateur vers la page de connexion s'il n'est pas connecté.
+    exit;
+}
+
+// Charger les voyages (fichier JSON ou base de données)
+function loadTrips() {
+    $file = '../data/trips.json';
+    if (!file_exists($file)) {
+        return [];
     }
+    return json_decode(file_get_contents($file), true);
+}
+
+$trips = loadTrips();
+
+// Traitement de la réservation (lorsqu'un utilisateur sélectionne un voyage)
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['trip_id'])) {
+    $tripId = $_POST['trip_id'];
+    $userId = $_SESSION['user']['login']; // Utilisateur connecté
+
+    // Enregistrer la réservation (à ajouter à un fichier ou une base de données)
+    $reservation = [
+        'user' => $userId,
+        'trip_id' => $tripId,
+        'date' => date('Y-m-d H:i:s'),
+    ];
+
+    // Sauvegarde dans un fichier JSON ou une base de données
+    $reservations = json_decode(file_get_contents('../data/reservations.json'), true) ?? [];
+    $reservations[] = $reservation;
+    file_put_contents('../data/reservations.json', json_encode($reservations, JSON_PRETTY_PRINT));
+
+    echo "<p>Réservation réussie !</p>";
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Réservation - My Trips</title>
-    <link rel="stylesheet" href="my_trips.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Réserver - My Trips</title>
+    <link href="my_trips.css" rel="stylesheet"/>
 </head>
 <body>
-    
-    <!-- Navigation -->
-    <nav>
-        <div class="logo"><img src="logo_my_trips.png" alt="My Trips Logo"></div>
-        <ul>
-            <li><a href="accueil.php">Accueil</a></li>
-            <li><a href="présentation.php">Présentation</a></li>
-            <li><a href="rechercher.php">Rechercher</a></li>
-            <li><a href="mon_profil.php">Mon Profil</a></li>
+  <nav>
+    <!-- Menu Navigation -->
+    <ul>
+        <li><a href="accueil.php">Accueil</a></li>
+        <li><a href="présentation.php">Présentation</a></li>
+        <li><a href="rechercher.php">Rechercher</a></li>
+        <li><a href="mon_profil.php">Mon Profil</a></li>
+        <?php if (isset($_SESSION['user'])): ?>
+            <li><a href="deconnexion.php">Se déconnecter</a></li>
+        <?php else: ?>
             <li><a href="inscription.php">S'inscrire</a></li>
             <li><a href="connexion.php">Se connecter</a></li>
-            <li><a href="reserver.php" class="active">Réserver</a></li>
-        </ul>
-    </nav>
-    
-    <!-- Banner -->
-    <header class="banner">
-        <div class="banner-content">
-            <h1>Réservez votre voyage</h1>
-            <p>Planifiez votre séjour au Bénin en quelques clics.</p>
-        </div>
-    </header>
-
-    <!-- Formulaire de réservation -->
-    <section class="reservation-section signup-section">
-        <h2>Réservation</h2>
-
-        <!-- Message d'erreur si des champs sont manquants -->
-        <?php if (isset($message_erreur)): ?>
-            <div class="error-message">
-                <p><?php echo htmlspecialchars($message_erreur); ?></p>
-            </div>
         <?php endif; ?>
+        <li><a class="btn-primary" href="reserver.php">Réserver</a></li>
+    </ul>
+  </nav>
 
-        <form method="POST">
-            <label for="destination">Destination :</label>
-            <select id="destination" name="destination" required>
-                <option value="">Sélectionnez une destination</option>
-                <option value="ouidah">Ouidah</option>
-                <option value="porto-novo">Porto-Novo</option>
-                <option value="abomey">Abomey</option>
-                <option value="ganvie">Ganvié</option>
-                <option value="grand-popo">Grand Popo</option>
-                <option value="parakou">Parakou</option>
-                <option value="natitingou">Natitingou</option>
-                <option value="dassa">Dassa</option>
-                <option value="tanguieta">Tanguieta</option>
-                <option value="possotome">Possotomé</option>
-            </select>
+  <header>
+    <h1>Choisissez votre voyage</h1>
+  </header>
 
-            <label for="date">Date de départ :</label>
-            <input type="date" id="date" name="date" required>
+  <section class="trip-list">
+    <?php foreach ($trips as $trip): ?>
+        <div class="trip-card">
+            <img alt="<?php echo $trip['titre']; ?>" src="<?php echo $trip['image']; ?>"/>
+            <h3><?php echo $trip['titre']; ?></h3>
+            <p>Prix: <?php echo $trip['prix']; ?>€</p>
+            <p>Durée: <?php echo $trip['duree']; ?> jours</p>
+            <form method="POST">
+                <input type="hidden" name="trip_id" value="<?php echo $trip['id']; ?>">
+                <button type="submit" class="btn-primary">Réserver</button>
+            </form>
+        </div>
+    <?php endforeach; ?>
+  </section>
 
-            <label for="personnes">Nombre de personnes :</label>
-            <input type="number" id="personnes" name="personnes" min="1" max="10" required>
-
-            <button type="submit" class="btn-primary">Réserver</button>
-        </form>
-    </section>
-    
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2025 My Trips. Tous droits réservés.</p>
-    </footer>
+  <footer>
+    <p>© 2025 My Trips. Tous droits réservés.</p>
+  </footer>
 </body>
 </html>
