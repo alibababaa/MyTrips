@@ -1,0 +1,17 @@
+[
+    {"title": "Voyage 1", "dates": {"start": "2025-06-01", "end": "2025-06-10"}, "price": 1050},
+    {"title": "Voyage 2", "dates": {"start": "2025-07-15", "end": "2025-07-25"}, "price": 1100},
+    {"title": "Voyage 3", "dates": {"start": "2025-08-10", "end": "2025-08-20"}, "price": 1150},
+    {"title": "Voyage 4", "dates": {"start": "2025-09-05", "end": "2025-09-15"}, "price": 1200},
+    {"title": "Voyage 5", "dates": {"start": "2025-10-01", "end": "2025-10-10"}, "price": 1250},
+    {"title": "Voyage 6", "dates": {"start": "2025-11-20", "end": "2025-11-30"}, "price": 1300},
+    {"title": "Voyage 7", "dates": {"start": "2025-12-15", "end": "2025-12-25"}, "price": 1350},
+    {"title": "Voyage 8", "dates": {"start": "2026-01-10", "end": "2026-01-20"}, "price": 1400},
+    {"title": "Voyage 9", "dates": {"start": "2026-02-05", "end": "2026-02-15"}, "price": 1450},
+    {"title": "Voyage 10", "dates": {"start": "2026-03-01", "end": "2026-03-10"}, "price": 1500},
+    {"title": "Voyage 11", "dates": {"start": "2026-04-15", "end": "2026-04-25"}, "price": 1550},
+    {"title": "Voyage 12", "dates": {"start": "2026-05-10", "end": "2026-05-20"}, "price": 1600},
+    {"title": "Voyage 13", "dates": {"start": "2026-06-05", "end": "2026-06-15"}, "price": 1650},
+    {"title": "Voyage 14", "dates": {"start": "2026-07-01", "end": "2026-07-10"}, "price": 1700},
+    {"title": "Voyage 15", "dates": {"start": "2026-08-20", "end": "2026-08-30"}, "price": 1750}
+]
