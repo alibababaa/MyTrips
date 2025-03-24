@@ -1,0 +1,18 @@
+CREATE DATABASE IF NOT EXISTS mytrips_db
+  CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+USE mytrips_db;
+
+-- Table pour les destinations
+CREATE TABLE IF NOT EXISTS destinations (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  description TEXT NOT NULL
+);
+
+-- (Optionnel) Table pour gérer les utilisateurs/admins
+-- CREATE TABLE IF NOT EXISTS users (
+--   id INT AUTO_INCREMENT PRIMARY KEY,
+--   username VARCHAR(50) NOT NULL,
+--   password VARCHAR(255) NOT NULL
+-- );
