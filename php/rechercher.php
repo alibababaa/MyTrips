@@ -1,5 +1,4 @@
 <?php
-// Exemple de session démarrée pour gérer les utilisateurs
 session_start();
 
 // Si le formulaire a été soumis, récupérer les données et effectuer la recherche
