@@ -1,6 +1,4 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 session_start();
 
 // Vérifier si l'utilisateur est connecté
@@ -9,25 +7,11 @@ if (!isset($_SESSION['user'])) {
     exit;
 }
 
-// Ex. de fonction de chargement des voyages pour l'utilisateur
-function loadUserTrips($userId) {
-    // À vous d'adapter selon votre logique :
-    // Ex. si vous stockez dans un JSON, vous pouvez filtrer par userId
-    // Pour l'instant, on renvoie un tableau d'exemple :
-    return [
-        [
-            'id' => 1,
-            'titre' => 'Voyage de test',
-            'date_debut' => '2025-06-01',
-            'date_fin'   => '2025-06-10'
-        ],
-        // ...
-    ];
-}
-
+// Charger les voyages de l'utilisateur depuis un fichier ou base de données
 $userId = $_SESSION['user']['login'];  // Identifiant de l'utilisateur connecté
-$trips = loadUserTrips($userId);
+$trips = loadUserTrips($userId);  // Fonction à définir pour charger les voyages de l'utilisateur
 ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -38,13 +22,13 @@ $trips = loadUserTrips($userId);
 </head>
 <body>
     <nav>
-      <ul>
-        <li><a href="accueil.php">Accueil</a></li>
-        <li><a href="presentation.php">Présentation</a></li>
-        <li><a href="rechercher.php">Rechercher</a></li>
-        <li><a class="active" href="mon_profil.php">Mon Profil</a></li>
-        <li><a href="deconnexion.php">Se déconnecter</a></li>
-      </ul>
+        <ul>
+            <li><a href="accueil.php">Accueil</a></li>
+            <li><a href="présentation.php">Présentation</a></li>
+            <li><a href="rechercher.php">Rechercher</a></li>
+            <li><a class="active" href="mon_profil.php">Mon Profil</a></li>
+            <li><a href="deconnexion.php">Se déconnecter</a></li>
+        </ul>
     </nav>
 
     <header>
@@ -59,9 +43,8 @@ $trips = loadUserTrips($userId);
             <ul>
                 <?php foreach ($trips as $trip): ?>
                     <li>
-                        <a href="trip_details.php?trip_id=<?php echo $trip['id']; ?>">
-                            <?php echo htmlspecialchars($trip['titre']); ?>
-                            (<?php echo htmlspecialchars($trip['date_debut']); ?> - <?php echo htmlspecialchars($trip['date_fin']); ?>)
+                        <a href="details_voyage.php?trip_id=<?php echo $trip['id']; ?>">
+                            <?php echo htmlspecialchars($trip['titre']); ?> (<?php echo htmlspecialchars($trip['date_debut']); ?> - <?php echo htmlspecialchars($trip['date_fin']); ?>)
                         </a>
                     </li>
                 <?php endforeach; ?>
