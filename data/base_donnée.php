@@ -1,8 +1,15 @@
 <?php
-// db_connect.php
+/**
+ * base_donnee.php
+ * Connexion à la base de données via PDO.
+ * Vous pouvez inclure ce fichier là où vous en avez besoin.
+ */
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 $host = 'localhost';
-$dbname = 'nom_de_ta_base';
+$dbname = 'nom_de_ta_base';  // À adapter
 $username = 'root';
 $password = '';
 
