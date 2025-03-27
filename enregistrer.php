@@ -1,6 +1,4 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 session_start();
 
 // Vérification si l'utilisateur est connecté
@@ -20,14 +18,12 @@ if (isset($_GET['trip_id'])) {
     ];
 
     // Sauvegarde dans un fichier JSON (ou base de données)
-    $file = __DIR__ . '/../data/transactions.json';
-    $transactions = file_exists($file) ? json_decode(file_get_contents($file), true) : [];
+    $transactions = json_decode(file_get_contents('../data/transactions.json'), true) ?? [];
     $transactions[] = $paymentDetails;
-    file_put_contents($file, json_encode($transactions, JSON_PRETTY_PRINT));
+    file_put_contents('../data/transactions.json', json_encode($transactions, JSON_PRETTY_PRINT));
 
     echo "<p>Paiement réussi et transaction enregistrée.</p>";
-    echo '<p><a href="mon_profil.php">Revenir à mon profil</a></p>';
 } else {
     echo "<p>Erreur lors de l'enregistrement du paiement.</p>";
-    echo '<p><a href="accueil.php">Retour à l\'accueil</a></p>';
 }
+?>
