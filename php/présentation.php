@@ -1,7 +1,5 @@
 <?php
 session_start();
-
-// Vous pouvez ajouter ici des données dynamiques si nécessaire
 ?>
 
 <!DOCTYPE html>
