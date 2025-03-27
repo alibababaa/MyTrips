@@ -7,11 +7,33 @@ if (!isset($_SESSION['user'])) {
     exit;
 }
 
-// Charger les voyages de l'utilisateur depuis un fichier ou base de données
-$userId = $_SESSION['user']['login'];  // Identifiant de l'utilisateur connecté
-$trips = loadUserTrips($userId);  // Fonction à définir pour charger les voyages de l'utilisateur
-?>
+/**
+ * Exemple de fonction pour charger les voyages payés par l'utilisateur.
+ * À personnaliser selon votre logique (fichier JSON, base de données...).
+ */
+function loadUserTrips($userId) {
+    // Ex. : si vous avez un fichier JSON "reservations.json" qui stocke
+    // toutes les réservations, vous pouvez filtrer par userId.
+    // Ici, on renvoie un tableau fictif :
+    return [
+        [
+            'id' => 1,
+            'titre' => 'Voyage à Ouidah',
+            'date_debut' => '2025-06-01',
+            'date_fin'   => '2025-06-10'
+        ],
+        [
+            'id' => 2,
+            'titre' => 'Circuit Porto-Novo',
+            'date_debut' => '2025-07-15',
+            'date_fin'   => '2025-07-25'
+        ]
+    ];
+}
 
+$userId = $_SESSION['user']['login'];  // Identifiant de l'utilisateur connecté
+$trips = loadUserTrips($userId);
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -24,7 +46,7 @@ $trips = loadUserTrips($userId);  // Fonction à définir pour charger les voyag
     <nav>
         <ul>
             <li><a href="accueil.php">Accueil</a></li>
-            <li><a href="présentation.php">Présentation</a></li>
+            <li><a href="presentation.php">Présentation</a></li>
             <li><a href="rechercher.php">Rechercher</a></li>
             <li><a class="active" href="mon_profil.php">Mon Profil</a></li>
             <li><a href="deconnexion.php">Se déconnecter</a></li>
@@ -44,7 +66,9 @@ $trips = loadUserTrips($userId);  // Fonction à définir pour charger les voyag
                 <?php foreach ($trips as $trip): ?>
                     <li>
                         <a href="details_voyage.php?trip_id=<?php echo $trip['id']; ?>">
-                            <?php echo htmlspecialchars($trip['titre']); ?> (<?php echo htmlspecialchars($trip['date_debut']); ?> - <?php echo htmlspecialchars($trip['date_fin']); ?>)
+                            <?php echo htmlspecialchars($trip['titre']); ?>
+                            (du <?php echo htmlspecialchars($trip['date_debut']); ?>
+                            au <?php echo htmlspecialchars($trip['date_fin']); ?>)
                         </a>
                     </li>
                 <?php endforeach; ?>
