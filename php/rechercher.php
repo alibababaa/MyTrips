@@ -1,18 +1,14 @@
 <?php
-// Exemple de session démarrée pour gérer les utilisateurs
 session_start();
 
 // Si le formulaire a été soumis, récupérer les données et effectuer la recherche
+$resultats = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $destination = $_POST['destination'];
-    $date_depart = $_POST['date'];
-    $options = $_POST['options'];
-    
-    // Effectuer la recherche en fonction des critères (c'est un exemple statique ici)
-    // Vous pouvez connecter à une base de données pour obtenir les résultats réels
-    $resultats = []; // Remplacer ceci par les résultats de la recherche
-    
-    // Exemple de données fictives pour les résultats
+    $destination = $_POST['destination'] ?? '';
+    $date_depart = $_POST['date'] ?? '';
+    $options     = $_POST['options'] ?? '';
+
+    // Exemple de résultats fictifs
     $resultats[] = "Voyage à Ouidah du 01/05/2025 au 07/05/2025 avec hébergement et transport.";
     $resultats[] = "Circuit à Porto-Novo du 15/06/2025 au 20/06/2025 avec activités culturelles.";
     $resultats[] = "Séjour à Ganvié avec hébergement et activités nature.";
@@ -23,11 +19,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="fr">
 <head>
   <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Rechercher - My Trips</title>
   <link href="my_trips.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com" rel="preconnect"/>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap" rel="stylesheet"/>
 </head>
 <body>
   
@@ -38,9 +34,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <li><a href="accueil.php">Accueil</a></li>
     <li><a href="présentation.php">Présentation</a></li>
     <li><a class="active" href="rechercher.php">Rechercher</a></li>
-    <li><a href="profil.php">Mon Profil</a></li>
-    <li><a href="inscription.php">S'inscrire</a></li>
-    <li><a href="connexion.php">Se connecter</a></li>
+
+    <!-- Correction : On remplace “profil.php” par un menu conditionnel -->
+    <?php if (isset($_SESSION['user'])): ?>
+      <li><a href="mon_profil.php">Mon Profil</a></li>
+      <li><a href="deconnexion.php">Se déconnecter</a></li>
+    <?php else: ?>
+      <li><a href="inscription.php">S'inscrire</a></li>
+      <li><a href="connexion.php">Se connecter</a></li>
+    <?php endif; ?>
+
     <li><a class="btn-primary" href="reserver.php">Réserver</a></li>
   </ul>
 </nav>
@@ -85,19 +88,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </section>
 
 <!-- Résultats de la recherche -->
-<?php if (isset($resultats) && !empty($resultats)): ?>
-  <section class="search-results">
-    <h2>Résultats de la recherche</h2>
-    <ul>
-      <?php foreach ($resultats as $resultat): ?>
-        <li><?php echo htmlspecialchars($resultat); ?></li>
-      <?php endforeach; ?>
-    </ul>
-  </section>
-<?php elseif ($_SERVER['REQUEST_METHOD'] === 'POST'): ?>
-  <section class="search-results">
-    <h2>Aucun résultat trouvé pour votre recherche.</h2>
-  </section>
+<?php if ($_SERVER['REQUEST_METHOD'] === 'POST'): ?>
+  <?php if (!empty($resultats)): ?>
+    <section class="search-results">
+      <h2>Résultats de la recherche</h2>
+      <ul>
+        <?php foreach ($resultats as $resultat): ?>
+          <li><?php echo htmlspecialchars($resultat); ?></li>
+        <?php endforeach; ?>
+      </ul>
+    </section>
+  <?php else: ?>
+    <section class="search-results">
+      <h2>Aucun résultat trouvé pour votre recherche.</h2>
+    </section>
+  <?php endif; ?>
 <?php endif; ?>
 
 <!-- Footer -->
