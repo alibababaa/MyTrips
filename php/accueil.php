@@ -1,3 +1,10 @@
+<?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+session_start();  // indispensable si on fait un if (isset($_SESSION['user']))
+?>
+
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
