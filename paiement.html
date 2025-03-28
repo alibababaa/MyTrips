@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paiement - My Trips</title>
+    <link rel="stylesheet" href="my_trips.css">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="accueil.php">Accueil</a></li>
+            <li><a href="présentation.php">Présentation</a></li>
+            <li><a href="rechercher.php">Rechercher</a></li>
+            <li><a href="mon_profil.php">Mon Profil</a></li>
+            <li><a href="deconnexion.php">Se déconnecter</a></li>
+        </ul>
+    </nav>
+    
+    <header>
+        <h1>Récapitulatif du Voyage</h1>
+    </header>
+
+    <section class="trip-summary">
+        <h2><?php echo htmlspecialchars($selectedTrip['titre']); ?></h2>
+        <p><strong>Dates:</strong> <?php echo htmlspecialchars($selectedTrip['date_debut']); ?> - <?php echo htmlspecialchars($selectedTrip['date_fin']); ?></p>
+        <p><strong>Prix:</strong> <?php echo htmlspecialchars($selectedTrip['prix']); ?>€</p>
+    </section>
+
+    <h2>Formulaire de Paiement</h2>
+    <form action="verification_paiement.php" method="POST">
+        <h3>Coordonnées Bancaires</h3>
+        <label for="card_number">Numéro de carte (16 chiffres)</label>
+        <input type="text" name="card_number" id="card_number" pattern="\d{16}" required placeholder="1234 5678 1234 5678">
+
+        <label for="card_owner">Nom et prénom du propriétaire de la carte</label>
+        <input type="text" name="card_owner" id="card_owner" required placeholder="Jean Dupont">
+
+        <label for="expiry_date">Date d'expiration (MM/AA)</label>
+        <input type="text" name="expiry_date" id="expiry_date" pattern="\d{2}/\d{2}" required placeholder="MM/AA">
+
+        <label for="cvv">Valeur de contrôle (CVV - 3 chiffres)</label>
+        <input type="text" name="cvv" id="cvv" pattern="\d{3}" required placeholder="123">
+
+        <input type="hidden" name="trip_id" value="<?php echo $selectedTrip['id']; ?>">
+
+        <button type="submit" class="btn-primary">Payer</button>
+    </form>
+
+    <footer>
+        <p>&copy; 2025 My Trips. Tous droits réservés.</p>
+    </footer>
+</body>
+</html>
