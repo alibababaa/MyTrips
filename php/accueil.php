@@ -3,19 +3,16 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 session_start();  // indispensable si on fait un if (isset($_SESSION['user']))
 ?>
-
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Accueil - My Trips</title>
   <link href="my_trips.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com" rel="preconnect"/>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap" rel="stylesheet"/>
 </head>
-
 <body>
   <nav>
     <div class="logo">
@@ -23,9 +20,9 @@ session_start();  // indispensable si on fait un if (isset($_SESSION['user']))
     </div>
     <ul>
       <li><a class="active" href="accueil.php">Accueil</a></li>
-      <li><a href="présentation.php">Présentation</a></li>
+      <li><a href="presentation.php">Présentation</a></li>
       <li><a href="rechercher.php">Rechercher</a></li>
-      <li><a href="mon_profil.php">Mon Profil</a></li>
+
       <?php if (isset($_SESSION['user'])): ?>
         <li><a href="mon_profil.php">Mon Profil</a></li>
         <li><a href="deconnexion.php">Se déconnecter</a></li>
@@ -33,6 +30,7 @@ session_start();  // indispensable si on fait un if (isset($_SESSION['user']))
         <li><a href="inscription.php">S'inscrire</a></li>
         <li><a href="connexion.php">Se connecter</a></li>
       <?php endif; ?>
+
       <li><a class="btn-primary" href="reserver.php">Réserver</a></li>
     </ul>
   </nav>
