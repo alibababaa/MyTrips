@@ -7,14 +7,28 @@ if (!isset($_SESSION['user'])) {
 
 // Fonction de chargement sécurisée des fichiers JSON
 function loadJSON($file) {
-    if (!file_exists($file)) return [];
+    if (!file_exists($file)) {
+        echo '<p style="color: red;">Erreur : Fichier ' . htmlspecialchars($file) . ' introuvable.</p>';
+        return [];
+    }
+    
     $data = file_get_contents($file);
+    if ($data === false) {
+        echo '<p style="color: red;">Erreur : Impossible de lire le fichier ' . htmlspecialchars($file) . '.</p>';
+        return [];
+    }
+    
     $json = json_decode($data, true);
-    return is_array($json) ? $json : []; // Vérifie que c'est bien un tableau
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        echo '<p style="color: red;">Erreur JSON : ' . json_last_error_msg() . '</p>';
+        return [];
+    }
+    
+    return is_array($json) ? $json : [];
 }
 
-$trips = loadJSON('../data/trips.json');
-$reservations = loadJSON('../data/reservations.json');
+$trips = loadJSON(__DIR__ . '/../data/trips.json');
+$reservations = loadJSON(__DIR__ . '/../data/reservations.json');
 $reservation_message = "";
 
 // Debugging: Vérifier si les voyages sont bien chargés
@@ -40,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['trip_id'])) {
                 'trip_id' => $tripId,
                 'date' => date('Y-m-d H:i:s'),
             ];
-            file_put_contents('../data/reservations.json', json_encode($reservations, JSON_PRETTY_PRINT));
+            file_put_contents(__DIR__ . '/../data/reservations.json', json_encode($reservations, JSON_PRETTY_PRINT));
             $reservation_message = "<p class='success'>Réservation réussie !</p>";
         } else {
             $reservation_message = "<p class='error'>Vous avez déjà réservé ce voyage.</p>";
