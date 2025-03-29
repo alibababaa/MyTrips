@@ -8,8 +8,8 @@ if (!isset($_SESSION['user'])) {
 }
 
 // Chargement sécurisé des données depuis trips.json
-$tripsData = file_get_contents("../data/trips.json");
-$trips = json_decode($tripsData, true);
+$tripsData = file_get_contents("../trips.json");
+$trips = json_decode($trips, true);
 
 // Sélection du voyage depuis l'ID passé en paramètre
 $selectedTrip = null;
