@@ -143,23 +143,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['trip_id'])) {
     <?php echo $reservation_message; ?>
     
     <section class="trip-list">
-        <?php if (!empty($trips)): ?>
-            <?php foreach ($trips as $trip): ?>
-                <div class="trip-card">
-                    <img alt="<?php echo $trip['titre']; ?>" src="<?php echo $trip['image']; ?>">
-                    <h3><?php echo $trip['titre']; ?></h3>
-                    <p>Prix: <?php echo $trip['prix']; ?>€</p>
-                    <p>Durée: <?php echo $trip['duree']; ?> jours</p>
-                    <form method="POST">
-                        <input type="hidden" name="trip_id" value="<?php echo $trip['id']; ?>">
-                        <button type="submit" class="btn-primary">Réserver</button>
-                    </form>
-                </div>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <p>Aucun voyage disponible pour le moment.</p>
-        <?php endif; ?>
-    </section>
+    <?php if (!empty($trips)): ?>
+        <?php foreach ($trips as $index => $trip): ?>
+            <div class="trip-card">
+                <h3><?php echo htmlspecialchars($trip['title']); ?></h3>
+                <p>Prix: <?php echo htmlspecialchars($trip['price']); ?>€</p>
+                <p>Dates: du <?php echo htmlspecialchars($trip['dates']['start']); ?> au <?php echo htmlspecialchars($trip['dates']['end']); ?></p>
+                <form method="POST">
+                    <input type="hidden" name="trip_id" value="<?php echo $index; ?>">
+                    <button type="submit" class="btn-primary">Réserver</button>
+                </form>
+            </div>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <p>Aucun voyage disponible pour le moment.</p>
+    <?php endif; ?>
+</section>
+
   </div>
 
   <footer>
