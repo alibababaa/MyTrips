@@ -10,16 +10,23 @@ function loadJSON($file) {
     if (!file_exists($file)) return [];
     $data = file_get_contents($file);
     $json = json_decode($data, true);
-    return $json ?: []; // Retourne un tableau vide si erreur
+    return is_array($json) ? $json : []; // Vérifie que c'est bien un tableau
 }
 
 $trips = loadJSON('../data/trips.json');
 $reservations = loadJSON('../data/reservations.json');
 $reservation_message = "";
 
+// Debugging: Vérifier si les voyages sont bien chargés
+if (empty($trips)) {
+    echo '<p style="color: red;">Erreur : Aucun voyage chargé depuis trips.json</p>';
+    echo '<pre>'; print_r($trips); echo '</pre>';
+    exit;
+}
+
 // Traitement de la réservation
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['trip_id'])) {
-    $tripId = (string) $_POST['trip_id']; // Convertir en chaîne pour correspondre au JSON
+    $tripId = (string) $_POST['trip_id']; // Convertir en chaîne
     $userId = $_SESSION['user']['login'];
 
     // Vérifier si le trip existe
@@ -77,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['trip_id'])) {
     <?php echo $reservation_message; ?>
     
     <section class="trip-list">
-        <?php if (!empty($trips)): ?>
+        <?php if (count($trips) > 0): ?>
             <?php foreach ($trips as $index => $trip): ?>
                 <div class="trip-card">
                     <h3><?php echo htmlspecialchars($trip['title']); ?></h3>
@@ -90,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['trip_id'])) {
                 </div>
             <?php endforeach; ?>
         <?php else: ?>
-            <p>Aucun voyage disponible pour le moment.</p>
+            <p style="color: red;">Erreur : Aucun voyage disponible.</p>
         <?php endif; ?>
     </section>
   </div>
