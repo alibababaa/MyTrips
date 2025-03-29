@@ -27,8 +27,8 @@ function loadJSON($file) {
     return is_array($json) ? $json : [];
 }
 
-$trips = loadJSON(__DIR__ . '/../data/trips.json');
-$reservations = loadJSON(__DIR__ . '/../data/reservations.json');
+$trips = loadJSON(__DIR__ . '/../trips.json');
+$reservations = loadJSON(__DIR__ . '/../reservations.json');
 $reservation_message = "";
 
 // Debugging: Vérifier si les voyages sont bien chargés
