@@ -1,25 +1,33 @@
 <?php
 session_start();
 
-// Redirige vers la connexion si l'utilisateur n'est pas connecté
-if (!isset($_SESSION['user'])) {
-    header("Location: connexion.php");
-    exit();
+ $file_path = '/Users/ilyesfellah/Downloads/MyTrips-main-15/trips.json';
+
+
+// Vérifie si le fichier existe et peut être lu
+if (file_exists($file_path) && is_readable($file_path)) {
+    $json_content = file_get_contents($file_path);
+    
+    // Vérifie si le contenu du fichier a été correctement lu
+    if ($json_content !== false) {
+        $trips = json_decode($json_content, true);
+
+        // Vérifie si le décodage JSON a réussi
+        if ($trips === null && json_last_error() !== JSON_ERROR_NONE) {
+            echo "Erreur de décodage JSON: " . json_last_error_msg();
+        }
+    } else {
+        echo "Erreur lors de la lecture du fichier JSON.";
+    }
+} else {
+    echo "Le fichier trips.json est introuvable ou inaccessible.";
 }
 
-// Chargement sécurisé des données depuis trips.json
-$tripsData = file_get_contents("../trips.json");
-$trips = json_decode($trips, true);
-
-// Sélection du voyage depuis l'ID passé en paramètre
-$selectedTrip = null;
-if (isset($_GET['trip_id'])) {
-    foreach ($trips as $trip) {
-        if ($trip['id'] == $_GET['trip_id']) {
-            $selectedTrip = $trip;
-            break;
-        }
-    }
+// Vérifie si la variable $trips est bien définie avant de l'utiliser
+if (isset($trips) && is_array($trips)) {
+    // Code pour afficher les voyages
+} else {
+    echo "Aucun voyage disponible.";
 }
 ?>
 
