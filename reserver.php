@@ -49,6 +49,7 @@ if (isset($_GET['trip_id'])) {
 </header>
 
 <section class="destinations" style="display: flex; flex-wrap: wrap;">
+   <?php if (is_array($trips) && !empty($trips)): ?>
     <?php foreach ($trips as $trip): ?>
         <div class="destination-card">
             <img src="<?= htmlspecialchars($trip['image']) ?>" alt="<?= htmlspecialchars($trip['titre']) ?>">
@@ -61,6 +62,10 @@ if (isset($_GET['trip_id'])) {
             </form>
         </div>
     <?php endforeach; ?>
+<?php else: ?>
+    <p>Aucun voyage disponible.</p>
+<?php endif; ?>
+
 </section>
 
 <?php if ($selectedTrip): ?>
