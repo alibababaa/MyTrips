@@ -168,14 +168,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['trip_id'])) {
 </body>
 </html>
 
-        <?php else: ?>
-            <p>Aucun voyage disponible pour le moment.</p>
-        <?php endif; ?>
-    </section>
-  </div>
-
-  <footer>
-    <p>© 2025 My Trips. Tous droits réservés.</p>
-  </footer>
-</body>
-</html>
+        
