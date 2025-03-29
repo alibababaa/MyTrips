@@ -1,7 +1,13 @@
 [
-    {"id": 1, "titre": "Voyage 1", "image": "voyage1.jpg", "prix": 1050, "duree": 10},
-    {"id": 2, "titre": "Voyage 2", "image": "voyage2.jpg", "prix": 1100, "duree": 10},
-    {"id": 3, "titre": "Voyage 3", "image": "voyage3.jpg", "prix": 1150, "duree": 10},
-    {"id": 4, "titre": "Voyage 4", "image": "voyage4.jpg", "prix": 1200, "duree": 10},
-    {"id": 5, "titre": "Voyage 5", "image": "voyage5.jpg", "prix": 1250, "duree": 10}
+    {"id": 1, "titre": "Porto-Novo", "image": "https://www.les-covoyageurs.com/ressources/images-lieux/450-visiter-porto-novo-benin.jpg", "prix": 1050, "duree": 10},
+    {"id": 2, "titre": "Ouidah", "image": "https://geoconfluences.ens-lyon.fr/images/image-a-la-une/img-rieucau/doc-3-la-porte-du-non-retour.jpg", "prix": 1100, "duree": 10},
+    {"id": 3, "titre": "Abomey", "image": "https://upload.wikimedia.org/wikipedia/commons/d/dd/Abomey-Königspalast2.jpg", "prix": 1150, "duree": 10},
+    {"id": 4, "titre": "Ganvié", "image": "https://www.build-green.fr/wp-content/uploads/2023/06/village-flottant-ganvie-benin_03.jpg", "prix": 1200, "duree": 10},
+    {"id": 5, "titre": "Grand Popo", "image": "https://www.gouv.bj/upload/thumbnails/articles//0548016001606546234.png", "prix": 1250, "duree": 10}
+    {"id": 6, "titre": "Parakou", "image": "https://upload.wikimedia.org/wikipedia/commons/2/21/La_colombe_18.jpg", "prix": 1250, "duree": 10}
+    {"id": 7, "titre": "Natitingou", "image": "https://www.gouv.bj/upload/thumbnails/articles//0952356001605489551.jpeg", "prix": 1250, "duree": 10}
+    {"id": 8, "titre": "Dassa", "image": "https://expatstraveltogether.com/wp-content/uploads/2023/09/DIG16_view-hills-city-dassazoume-benin-450w-1301045479-scaled-1.jpg", "prix": 1250, "duree": 10}
+    {"id": 9, "titre": "Tanguiéta", "image": "https://cenozo.org/wp-content/uploads/2021/03/Entree-du-Parc-National-de-la-Pendjari-a-Batia.jpg", "prix": 1250, "duree": 10}
+    {"id": 10, "titre": "Possotomé", "image": "https://www.ecobenin.org/wp-content/uploads/Possotome_cocotier_plage_chez_prefet_pilotis_lac_aheme_ecotourisme_ecobenin_benin.jpg", "prix": 1250, "duree": 10}
+
 ]
