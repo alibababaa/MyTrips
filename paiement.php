@@ -1,9 +1,11 @@
 <?php
+
 session_start();
 if (!isset($_SESSION['user'])) {
-    header('Location: connexion.php');  // Redirige vers la page de connexion si l'utilisateur n'est pas connecté
-    exit;
+    header("Location: connexion.php");
+    exit();
 }
+
 
 // Charger les informations du voyage sélectionné
 if (!isset($_GET['trip_id'])) {
