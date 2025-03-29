@@ -1,19 +1,27 @@
 <?php
 session_start();
 
-// Lecture du fichier trips.json
-$tripsData = file_get_contents("trips.json");
-$trips = json_decode($tripsData, true);
-
-
-session_start();
+// Redirige vers la connexion si l'utilisateur n'est pas connecté
 if (!isset($_SESSION['user'])) {
     header("Location: connexion.php");
     exit();
 }
+
+// Chargement sécurisé des données depuis trips.json
+$tripsData = file_get_contents("../data/trips.json");
+$trips = json_decode($tripsData, true);
+
+// Sélection du voyage depuis l'ID passé en paramètre
+$selectedTrip = null;
+if (isset($_GET['trip_id'])) {
+    foreach ($trips as $trip) {
+        if ($trip['id'] == $_GET['trip_id']) {
+            $selectedTrip = $trip;
+            break;
+        }
+    }
+}
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -40,20 +48,34 @@ if (!isset($_SESSION['user'])) {
     </div>
 </header>
 
-<section class="destinations" style="display: flex;">
-    <?php foreach ($trips as $index => $trip): ?>
+<section class="destinations" style="display: flex; flex-wrap: wrap;">
+    <?php foreach ($trips as $trip): ?>
         <div class="destination-card">
-            <img src="images/voyage.jpg" alt="Voyage Image">
-            <h3><?= htmlspecialchars($trip['title']) ?></h3>
-            <p><strong>Dates :</strong> <?= htmlspecialchars($trip['dates']['start']) ?> → <?= htmlspecialchars($trip['dates']['end']) ?></p>
-            <p><strong>Prix :</strong> <?= htmlspecialchars($trip['price']) ?> €</p>
-            <form action="trips_details.php" method="GET">
-                <input type="hidden" name="id" value="<?= $index ?>">
-                <button class="btn-primary" type="submit">Voir détails</button>
+            <img src="<?= htmlspecialchars($trip['image']) ?>" alt="<?= htmlspecialchars($trip['titre']) ?>">
+            <h3><?= htmlspecialchars($trip['titre']) ?></h3>
+            <p><strong>Durée :</strong> <?= htmlspecialchars($trip['duree']) ?> jours</p>
+            <p><strong>Prix :</strong> <?= htmlspecialchars($trip['prix']) ?> €</p>
+            <form action="reserver.php" method="GET">
+                <input type="hidden" name="trip_id" value="<?= htmlspecialchars($trip['id']) ?>">
+                <button class="btn-primary" type="submit">Réserver ce voyage</button>
             </form>
         </div>
     <?php endforeach; ?>
 </section>
+
+<?php if ($selectedTrip): ?>
+    <section class="selected-trip">
+        <h2><?= htmlspecialchars($selectedTrip['titre']) ?></h2>
+        <img src="<?= htmlspecialchars($selectedTrip['image']) ?>" alt="<?= htmlspecialchars($selectedTrip['titre']) ?>">
+        <p><strong>Prix :</strong> <?= htmlspecialchars($selectedTrip['prix']) ?> €</p>
+        <p><strong>Durée :</strong> <?= htmlspecialchars($selectedTrip['duree']) ?> jours</p>
+
+        <form method="POST">
+            <input type="hidden" name="trip_id" value="<?= htmlspecialchars($selectedTrip['id']) ?>">
+            <button type="submit" class="btn-primary">Confirmer la réservation</button>
+        </form>
+    </section>
+<?php endif; ?>
 
 <footer>
     <p>© 2025 My Trips. Tous droits réservés.</p>
