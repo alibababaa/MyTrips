@@ -17,16 +17,17 @@ $trips = loadJSON('../data/trips.json');
 $reservations = loadJSON('../data/reservations.json');
 $reservation_message = "";
 
+// Vérifier si le JSON est correctement chargé
+debug($trips);
+
 // Traitement de la réservation
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['trip_id'])) {
     $tripId = $_POST['trip_id'];
     $userId = $_SESSION['user']['login'];
 
     // Vérifier si le trip existe
-    $tripExists = array_filter($trips, fn($trip) => $trip['id'] == $tripId);
-    
-    if ($tripExists) {
-        // Vérifier si l'utilisateur a déjà réservé ce trip
+    if (isset($trips[$tripId])) {
+        // Vérifier si l'utilisateur a déjà réservé ce voyage
         $alreadyReserved = array_filter($reservations, fn($res) => $res['user'] == $userId && $res['trip_id'] == $tripId);
         
         if (!$alreadyReserved) {
@@ -43,6 +44,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['trip_id'])) {
     } else {
         $reservation_message = "<p class='error'>Voyage introuvable.</p>";
     }
+}
+
+function debug($data) {
+    echo '<pre>';
+    print_r($data);
+    echo '</pre>';
+    exit;
 }
 ?>
 
@@ -80,14 +88,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['trip_id'])) {
     
     <section class="trip-list">
         <?php if (!empty($trips)): ?>
-            <?php foreach ($trips as $trip): ?>
+            <?php foreach ($trips as $index => $trip): ?>
                 <div class="trip-card">
-                    <img alt="<?php echo htmlspecialchars($trip['titre']); ?>" src="<?php echo htmlspecialchars($trip['image']); ?>">
-                    <h3><?php echo htmlspecialchars($trip['titre']); ?></h3>
-                    <p>Prix: <?php echo htmlspecialchars($trip['prix']); ?>€</p>
-                    <p>Durée: <?php echo htmlspecialchars($trip['duree']); ?> jours</p>
+                    <h3><?php echo htmlspecialchars($trip['title']); ?></h3>
+                    <p>Prix: <?php echo htmlspecialchars($trip['price']); ?>€</p>
+                    <p>Dates: <?php echo htmlspecialchars($trip['dates']['start']); ?> - <?php echo htmlspecialchars($trip['dates']['end']); ?></p>
                     <form method="POST">
-                        <input type="hidden" name="trip_id" value="<?php echo htmlspecialchars($trip['id']); ?>">
+                        <input type="hidden" name="trip_id" value="<?php echo $index; ?>">
                         <button type="submit" class="btn-primary">Réserver</button>
                     </form>
                 </div>
