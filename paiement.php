@@ -7,11 +7,11 @@ if (!isset($_SESSION['user'])) {
 }
 
 // Vérification du trip_id envoyé depuis reserver.php
-if (!isset($_POST['trip_id'])) {
+if (!isset($_POST['trip_id']) && !isset($_GET['trip_id'])) {
     exit("Erreur : Aucun voyage sélectionné.");
 }
 
-$tripId = $_POST['trip_id'];
+$tripId = $_POST['trip_id'] ?? $_GET['trip_id'];
 
 // Chargement du fichier trips.json
 $file_path = __DIR__ . '/trips.json';
@@ -30,12 +30,11 @@ if (!$selectedTrip) {
     exit("Erreur : Voyage introuvable.");
 }
 
-// Traitement du paiement après soumission
+// Traitement du paiement uniquement après soumission du formulaire bancaire
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['card_number'], $_POST['card_owner'], $_POST['expiry_date'], $_POST['cvv'])) {
 
-    // Ici, ajoute ta logique réelle de vérification du paiement (intégration avec une API bancaire)
-    // Simulation de validation réussie pour l'exemple :
-    $paymentSuccessful = true;
+    // Logique réelle de vérification du paiement (à remplacer par une vraie vérification bancaire)
+    $paymentSuccessful = true; // Simulation
 
     if ($paymentSuccessful) {
         // Enregistrement sécurisé dans transactions.json
@@ -53,6 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['card_number'], $_POST
         file_put_contents($transactions_path, json_encode($transactions, JSON_PRETTY_PRINT));
 
         echo "<p class='success'>Paiement réussi et réservation enregistrée.</p>";
+        exit; // Important : évite que le formulaire ne réapparaisse après succès
     } else {
         echo "<p class='error'>Erreur lors du paiement. Veuillez réessayer.</p>";
     }
