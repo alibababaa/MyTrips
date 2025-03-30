@@ -1,17 +1,34 @@
 <?php
 session_start();
+
 if (!isset($_SESSION['user'])) {
     header("Location: connexion.php");
     exit();
 }
 
-$reservations = json_decode(file_get_contents("reservations.json"), true);
-$trips = json_decode(file_get_contents("trips.json"), true);
+// Chargement sécurisé des fichiers JSON
+$reservationsPath = __DIR__ . '/transactions.json';
+$tripsPath = __DIR__ . '/trips.json';
+
+$reservations = file_exists($reservationsPath) ? json_decode(file_get_contents($reservationsPath), true) : [];
+$trips = file_exists($tripsPath) ? json_decode(file_get_contents($tripsPath), true) : [];
+
 $userLogin = $_SESSION['user']['login'];
 
+// Filtrer les réservations de l'utilisateur actuel
 $userTrips = array_filter($reservations, function($res) use ($userLogin) {
-    return $res['user'] === $userLogin;
+    return $res['user_id'] === $userLogin;
 });
+
+// Fonction pour retrouver les infos du voyage par ID
+function findTripById($trips, $id) {
+    foreach ($trips as $trip) {
+        if ($trip['id'] == $id) {
+            return $trip;
+        }
+    }
+    return null;
+}
 ?>
 
 <!DOCTYPE html>
@@ -38,17 +55,23 @@ $userTrips = array_filter($reservations, function($res) use ($userLogin) {
     </div>
 </header>
 
-<section class="destinations" style="display: flex;">
-    <?php foreach ($userTrips as $res): 
-        $trip = $trips[(int)$res['trip_id']] ?? null;
-        if ($trip): ?>
-        <div class="destination-card">
-            <h3><?= htmlspecialchars($trip['title']) ?></h3>
-            <p><strong>Dates:</strong> <?= $trip['dates']['start'] ?> → <?= $trip['dates']['end'] ?></p>
-            <p><strong>Prix:</strong> <?= $trip['price'] ?> €</p>
-            <p><strong>Date réservation:</strong> <?= $res['date'] ?></p>
-        </div>
-    <?php endif; endforeach; ?>
+<section class="destinations" style="display: flex; flex-wrap: wrap;">
+    <?php if (!empty($userTrips)): ?>
+        <?php foreach ($userTrips as $res): 
+            $trip = findTripById($trips, $res['trip_id']);
+            if ($trip): ?>
+                <div class="destination-card">
+                    <img src="<?= htmlspecialchars($trip['image']) ?>" alt="<?= htmlspecialchars($trip['titre']) ?>">
+                    <h3><?= htmlspecialchars($trip['titre']) ?></h3>
+                    <p><strong>Durée :</strong> <?= htmlspecialchars($trip['duree']) ?> jours</p>
+                    <p><strong>Prix :</strong> <?= htmlspecialchars($trip['prix']) ?> €</p>
+                    <p><strong>Date de réservation :</strong> <?= htmlspecialchars($res['payment_date']) ?></p>
+                </div>
+            <?php endif; ?>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <p>Vous n'avez aucune réservation pour le moment.</p>
+    <?php endif; ?>
 </section>
 
 <footer>
