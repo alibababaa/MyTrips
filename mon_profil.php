@@ -50,7 +50,7 @@ function findTripById($trips, $id) {
 
 <header class="banner">
     <div class="banner-content">
-        <h1>Bienvenue, <?= htmlspecialchars($_SESSION['user']['name']) ?></h1>
+        <h1>Bienvenue, <?= htmlspecialchars($_SESSION['user']['name'] ?? $_SESSION['user']['login']) ?></h1>
         <p>Vos réservations passées</p>
     </div>
 </header>
