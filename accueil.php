@@ -1,7 +1,7 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-session_start();  // indispensable si on fait un if (isset($_SESSION['user']))
+session_start();
 ?>
 
 <!DOCTYPE html>
@@ -24,9 +24,6 @@ session_start();  // indispensable si on fait un if (isset($_SESSION['user']))
       <li><a class="active" href="accueil.php">Accueil</a></li>
       <li><a href="présentation.php">Présentation</a></li>
       <li><a href="rechercher.php">Rechercher</a></li>
-
-      <!-- Correction : on affiche “Mon Profil” ET “Se déconnecter”
-           seulement si $_SESSION['user'] est défini, sinon “S'inscrire” et “Se connecter”. -->
       <?php if (isset($_SESSION['user'])): ?>
         <li><a href="mon_profil.php">Mon Profil</a></li>
         <li><a href="deconnexion.php">Se déconnecter</a></li>
@@ -34,7 +31,6 @@ session_start();  // indispensable si on fait un if (isset($_SESSION['user']))
         <li><a href="inscription.php">S'inscrire</a></li>
         <li><a href="connexion.php">Se connecter</a></li>
       <?php endif; ?>
-
       <li><a class="btn-primary" href="reserver.php">Réserver</a></li>
     </ul>
   </nav>
@@ -60,6 +56,11 @@ session_start();  // indispensable si on fait un if (isset($_SESSION['user']))
         ['name' => 'Dassa', 'img' => 'https://expatstraveltogether.com/wp-content/uploads/2023/09/DIG16_view-hills-city-dassazoume-benin-450w-1301045479-scaled-1.jpg'],
         ['name' => 'Tanguiéta', 'img' => 'https://cenozo.org/wp-content/uploads/2021/03/Entree-du-Parc-National-de-la-Pendjari-a-Batia.jpg'],
         ['name' => 'Possotomé', 'img' => 'https://www.ecobenin.org/wp-content/uploads/Possotome_cocotier_plage_chez_prefet_pilotis_lac_aheme_ecotourisme_ecobenin_benin.jpg'],
+        ['name' => 'Cotonou', 'img' => 'https://uhttps://prod.cdn-medias.jeuneafrique.com/cdn-cgi/image/q=auto,f=auto,metadata=none,width=1280,height=960,fit=cover/https://prod.cdn-medias.jeuneafrique.com/medias/2020/10/22/45994hr_.jpgpload.wikimedia.org/wikipedia/commons/d/d3/Cotonou_View.jpg'],
+        ['name' => 'Boukombé', 'img' => 'https://www.routedestata.bj/wp-content/uploads/2020/11/decouvrir_koussoukoingou_photo_drone_tata_koussou.jpg://upload.wikimedia.org/wikipedia/commons/4/4a/Boukomb%C3%A9_traditional_houses.jpg'],
+        ['name' => 'Dogbo', 'img' => 'https://https://upload.wikimedia.org/wikipedia/commons/f/f9/Vue_d%27entrée_du_site_des_hommes_à_queue_a_Dogo_au_Bénin.jpg.wikimedia.org/wikipedia/commons/b/b3/Dogbo_panorama.jpg'],
+        ['name' => 'Savalou', 'img' => 'https://https://static.wixstatic.com/media/76da4e_f844b208b74c4e889290b62e8b4b970c~mv2.jpg.wikimedia.org/wikipedia/commons/9/9f/Savalou_Benin.jpg'],
+        ['name' => 'Kandi', 'img' => 'https://upload.https://static.wixstatic.com/media/745c17_162837b3d5424f8a937f80f434b3f7e1~mv2.jpg/v1/fill/w_660,h_437,al_c,lg_1,q_80/745c17_162837b3d5424f8a937f80f434b3f7e1~mv2.jpg.org/wikipedia/commons/f/fd/Kandi_Benin.jpg']
     ];
 
     foreach ($destinations as $destination) {
