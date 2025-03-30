@@ -1,7 +1,8 @@
 <?php
 session_start();
 
- $file_path = '/Users/ilyesfellah/Downloads/MyTrips-main-15/trips.json';
+ $file_path = __DIR__ . '/trips.json';
+
 
 
 // Vérifie si le fichier existe et peut être lu
@@ -64,10 +65,10 @@ if (isset($trips) && is_array($trips)) {
             <h3><?= htmlspecialchars($trip['titre']) ?></h3>
             <p><strong>Durée :</strong> <?= htmlspecialchars($trip['duree']) ?> jours</p>
             <p><strong>Prix :</strong> <?= htmlspecialchars($trip['prix']) ?> €</p>
-            <form action="reserver.php" method="GET">
-                <input type="hidden" name="trip_id" value="<?= htmlspecialchars($trip['id']) ?>">
-                <button class="btn-primary" type="submit">Réserver ce voyage</button>
-            </form>
+             <form action="paiement.php" method="POST">
+    <input type="hidden" name="trip_id" value="<?= htmlspecialchars($selectedTrip['id']) ?>">
+    <button type="submit" class="btn-primary">Confirmer la réservation</button>
+</form>
         </div>
     <?php endforeach; ?>
 <?php else: ?>
@@ -83,10 +84,10 @@ if (isset($trips) && is_array($trips)) {
         <p><strong>Prix :</strong> <?= htmlspecialchars($selectedTrip['prix']) ?> €</p>
         <p><strong>Durée :</strong> <?= htmlspecialchars($selectedTrip['duree']) ?> jours</p>
 
-        <form method="POST">
-            <input type="hidden" name="trip_id" value="<?= htmlspecialchars($selectedTrip['id']) ?>">
-            <button type="submit" class="btn-primary">Confirmer la réservation</button>
-        </form>
+        <form action="paiement.php" method="POST">
+    <input type="hidden" name="trip_id" value="<?= htmlspecialchars($selectedTrip['id']) ?>">
+    <button type="submit" class="btn-primary">Confirmer la réservation</button>
+</form>
     </section>
 <?php endif; ?>
 
