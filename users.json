@@ -1,7 +1,9 @@
 [
-    {"login": "admin1", "password": "adminpass", "role": "admin", "name": "Admin One"},
-    {"login": "admin2", "password": "adminpass", "role": "admin", "name": "Admin Two"},
-    {"login": "user1", "password": "userpass", "role": "user", "name": "User One"},
-    {"login": "user2", "password": "userpass", "role": "user", "name": "User Two"},
-    {"login": "user3", "password": "userpass", "role": "user", "name": "User Three"}
+    {"login": "naruto@gmail.com", "password": "rasengan", "role": "admin", "name": "Naruto Uzumaki"},
+    {"login": "sasuke@gmail.com", "password": "chidori", "role": "admin", "name": "Sasuke Uchiha"},
+    {"login": "sakura@gmail.com", "password": "sakurapass", "role": "admin", "name": "Sakura Haruno"},
+    {"login": "light@gmail.com", "password": "kira", "role": "user", "name": "Light Yagami"},
+    {"login": "l@gmail.com", "password": "justice", "role": "user", "name": "L Lawliet"},
+    {"login": "ryuk@gmail.com", "password": "apples", "role": "user", "name": "Ryuk"},
+    {"login": "misa@gmail.com", "password": "idol", "role": "user", "name": "Misa Amane"}
 ]
