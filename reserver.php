@@ -1,14 +1,12 @@
 <?php
 session_start();
 
- $file_path = __DIR__ . '/trips.json';
-
-
+$file_path = __DIR__ . '/trips.json';
 
 // Vérifie si le fichier existe et peut être lu
 if (file_exists($file_path) && is_readable($file_path)) {
     $json_content = file_get_contents($file_path);
-    
+
     // Vérifie si le contenu du fichier a été correctement lu
     if ($json_content !== false) {
         $trips = json_decode($json_content, true);
@@ -25,10 +23,20 @@ if (file_exists($file_path) && is_readable($file_path)) {
 }
 
 // Vérifie si la variable $trips est bien définie avant de l'utiliser
-if (isset($trips) && is_array($trips)) {
-    // Code pour afficher les voyages
-} else {
+if (!isset($trips) || !is_array($trips)) {
+    $trips = [];
     echo "Aucun voyage disponible.";
+}
+
+// Sélection du voyage si trip_id est présent en paramètre GET
+$selectedTrip = null;
+if (isset($_GET['trip_id'])) {
+    foreach ($trips as $trip) {
+        if ($trip['id'] == $_GET['trip_id']) {
+            $selectedTrip = $trip;
+            break;
+        }
+    }
 }
 ?>
 
@@ -58,23 +66,22 @@ if (isset($trips) && is_array($trips)) {
 </header>
 
 <section class="destinations" style="display: flex; flex-wrap: wrap;">
-   <?php if (is_array($trips) && !empty($trips)): ?>
-    <?php foreach ($trips as $trip): ?>
-        <div class="destination-card">
-            <img src="<?= htmlspecialchars($trip['image']) ?>" alt="<?= htmlspecialchars($trip['titre']) ?>">
-            <h3><?= htmlspecialchars($trip['titre']) ?></h3>
-            <p><strong>Durée :</strong> <?= htmlspecialchars($trip['duree']) ?> jours</p>
-            <p><strong>Prix :</strong> <?= htmlspecialchars($trip['prix']) ?> €</p>
-             <form action="paiement.php" method="POST">
-    <input type="hidden" name="trip_id" value="<?= htmlspecialchars($Trip['id']) ?>">
-    <button type="submit" class="btn-primary">Confirmer la réservation</button>
-</form>
-        </div>
-    <?php endforeach; ?>
-<?php else: ?>
-    <p>Aucun voyage disponible.</p>
-<?php endif; ?>
-
+    <?php if (!empty($trips)): ?>
+        <?php foreach ($trips as $trip): ?>
+            <div class="destination-card">
+                <img src="<?= htmlspecialchars($trip['image']) ?>" alt="<?= htmlspecialchars($trip['titre']) ?>">
+                <h3><?= htmlspecialchars($trip['titre']) ?></h3>
+                <p><strong>Durée :</strong> <?= htmlspecialchars($trip['duree']) ?> jours</p>
+                <p><strong>Prix :</strong> <?= htmlspecialchars($trip['prix']) ?> €</p>
+                <form action="paiement.php" method="POST">
+                    <input type="hidden" name="trip_id" value="<?= htmlspecialchars($trip['id']) ?>">
+                    <button type="submit" class="btn-primary">Réserver ce voyage</button>
+                </form>
+            </div>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <p>Aucun voyage disponible.</p>
+    <?php endif; ?>
 </section>
 
 <?php if ($selectedTrip): ?>
@@ -85,9 +92,9 @@ if (isset($trips) && is_array($trips)) {
         <p><strong>Durée :</strong> <?= htmlspecialchars($selectedTrip['duree']) ?> jours</p>
 
         <form action="paiement.php" method="POST">
-    <input type="hidden" name="trip_id" value="<?= htmlspecialchars($selectedTrip['id']) ?>">
-    <button type="submit" class="btn-primary">Confirmer la réservation</button>
-</form>
+            <input type="hidden" name="trip_id" value="<?= htmlspecialchars($selectedTrip['id']) ?>">
+            <button type="submit" class="btn-primary">Confirmer la réservation</button>
+        </form>
     </section>
 <?php endif; ?>
 
