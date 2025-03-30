@@ -66,7 +66,7 @@ if (isset($trips) && is_array($trips)) {
             <p><strong>Durée :</strong> <?= htmlspecialchars($trip['duree']) ?> jours</p>
             <p><strong>Prix :</strong> <?= htmlspecialchars($trip['prix']) ?> €</p>
              <form action="paiement.php" method="POST">
-    <input type="hidden" name="trip_id" value="<?= htmlspecialchars($selectedTrip['id']) ?>">
+    <input type="hidden" name="trip_id" value="<?= htmlspecialchars($Trip['id']) ?>">
     <button type="submit" class="btn-primary">Confirmer la réservation</button>
 </form>
         </div>
