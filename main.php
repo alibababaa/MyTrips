@@ -1,189 +1,151 @@
 <?php
 session_start();
 
-// Fonction pour charger les utilisateurs depuis le fichier JSON
+// Fonctions
 function loadUsers() {
-    $file = '../data/users.json';
-    if (!file_exists($file)) {
-        return [];
-    }
-    return json_decode(file_get_contents($file), true);
+    return file_exists("users.json") ? json_decode(file_get_contents("users.json"), true) : [];
 }
 
-// Fonction pour enregistrer un nouvel utilisateur
 function saveUser($user) {
     $users = loadUsers();
     $users[] = $user;
-    file_put_contents('../data/users.json', json_encode($users, JSON_PRETTY_PRINT));
+    file_put_contents("users.json", json_encode($users, JSON_PRETTY_PRINT));
 }
 
-// Fonction pour charger les voyages depuis le fichier JSON
 function loadTrips() {
-    $file = '../data/trips.json';
-    if (!file_exists($file)) {
-        return [];
-    }
-    return json_decode(file_get_contents($file), true);
+    return file_exists("trips.json") ? json_decode(file_get_contents("trips.json"), true) : [];
 }
 
-// Fonction pour enregistrer un nouveau voyage
-function saveTrip($trip) {
-    $trips = loadTrips();
-    $trips[] = $trip;
-    file_put_contents('../data/trips.json', json_encode($trips, JSON_PRETTY_PRINT));
-}
-
-// Inscription
+// Gestion inscription
 if (isset($_POST['register'])) {
-    $login = $_POST['login'];
+    $name     = $_POST['name'];
+    $login    = $_POST['login'];
     $password = $_POST['password'];
-    $role = 'user';
-    
+
     $users = loadUsers();
     foreach ($users as $user) {
         if ($user['login'] === $login) {
-            die('Ce login est déjà pris.');
+            $register_error = "Ce login est déjà pris.";
+            break;
         }
     }
-    
-    $newUser = [
-        "login" => $login,
-        "password" => password_hash($password, PASSWORD_DEFAULT),
-        "role" => $role,
-        "name" => $_POST['name']
-    ];
-    
-    saveUser($newUser);
-    echo 'Inscription réussie, vous pouvez vous connecter.';
+
+    if (!isset($register_error)) {
+        $newUser = [
+            "login"    => $login,
+            "password" => password_hash($password, PASSWORD_DEFAULT),
+            "role"     => "user",
+            "name"     => $name
+        ];
+        saveUser($newUser);
+        $_SESSION['user'] = $newUser;
+        $register_success = "Inscription réussie. Bienvenue, $name!";
+    }
 }
 
-// Connexion
+// Gestion connexion
 if (isset($_POST['login_user'])) {
-    $login = $_POST['login'];
+    $login    = $_POST['login'];
     $password = $_POST['password'];
-    $users = loadUsers();
-    
+    $users    = loadUsers();
+
     foreach ($users as $user) {
         if ($user['login'] === $login && password_verify($password, $user['password'])) {
             $_SESSION['user'] = $user;
-            header('Location: dashboard.php');
-            exit;
+            $login_success = "Bienvenue, {$user['name']} !";
+            break;
         }
     }
-    echo 'Login ou mot de passe incorrect';
+
+    if (!isset($_SESSION['user'])) {
+        $login_error = "Login ou mot de passe incorrect.";
+    }
 }
 
-// Déconnexion
+// Gestion déconnexion
 if (isset($_GET['logout'])) {
     session_destroy();
-    header('Location: login.php');
+    header("Location: main.php");
     exit;
 }
 ?>
-
-<!-- Page d'inscription -->
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-    <title>Inscription</title>
+    <meta charset="UTF-8">
+    <title>Accueil - My Trips</title>
+    <link id="theme-stylesheet" rel="stylesheet" href="my_trips.css">
+    <script src="theme.js" defer></script>
 </head>
 <body>
+<nav>
+    <ul>
+        <li><a class="active" href="main.php">Accueil</a></li>
+        <li><a href="#trips">Voyages</a></li>
+        <li><a href="#signup">Inscription</a></li>
+        <li><a href="#login">Connexion</a></li>
+        <?php if (isset($_SESSION['user'])): ?>
+            <li><a href="?logout=true">Déconnexion</a></li>
+        <?php endif; ?>
+        <li><button id="themeToggle" class="btn-primary" style="background-color: transparent; color: #ffd700; border: 2px solid #ffd700;">🌓</button></li>
+    </ul>
+</nav>
+
+<!-- Section d'inscription -->
+<section id="signup">
     <h2>Inscription</h2>
+    <?php if (!empty($register_error)) echo "<p style='color:red;'>$register_error</p>"; ?>
+    <?php if (!empty($register_success)) echo "<p style='color:green;'>$register_success</p>"; ?>
     <form method="POST">
-        <label>Nom :</label>
-        <input type="text" name="name" required><br>
-        <label>Login :</label>
-        <input type="text" name="login" required><br>
-        <label>Mot de passe :</label>
-        <input type="password" name="password" required><br>
+        <input type="text" name="name" placeholder="Nom" required><br>
+        <input type="text" name="login" placeholder="Email / Identifiant" required><br>
+        <input type="password" name="password" placeholder="Mot de passe" required><br>
         <button type="submit" name="register">S'inscrire</button>
     </form>
-</body>
-</html>
+</section>
 
-<!-- Page de connexion -->
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Connexion</title>
-</head>
-<body>
+<!-- Section de connexion -->
+<section id="login">
     <h2>Connexion</h2>
+    <?php if (!empty($login_error)) echo "<p style='color:red;'>$login_error</p>"; ?>
+    <?php if (!empty($login_success)) echo "<p style='color:green;'>$login_success</p>"; ?>
     <form method="POST">
-        <label>Login :</label>
-        <input type="text" name="login" required><br>
-        <label>Mot de passe :</label>
-        <input type="password" name="password" required><br>
+        <input type="text" name="login" placeholder="Login" required><br>
+        <input type="password" name="password" placeholder="Mot de passe" required><br>
         <button type="submit" name="login_user">Se connecter</button>
     </form>
-</body>
-</html>
+</section>
 
-<!-- Page des voyages -->
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Liste des voyages</title>
-</head>
-<body>
+<!-- Liste des voyages -->
+<section id="trips">
     <h2>Voyages disponibles</h2>
     <?php
     $trips = loadTrips();
-    foreach ($trips as $trip) {
-        echo '<div>';
-        echo '<h3>' . $trip['titre'] . '</h3>';
-        echo '<p>Prix: ' . $trip['prix'] . '€</p>';
-        echo '<p>Durée: ' . $trip['duree'] . ' jours</p>';
-        echo '<a href="trip_details.php?id=' . $trip['id'] . '">Voir plus</a>';
-        echo '</div>';
+    if (!empty($trips)) {
+        foreach ($trips as $trip) {
+            echo "<div style='margin-bottom: 1.5em;'>";
+            echo "<h3>" . htmlspecialchars($trip['titre']) . "</h3>";
+            echo "<p>Prix : " . htmlspecialchars($trip['prix']) . "€</p>";
+            echo "<p>Durée : " . htmlspecialchars($trip['duree']) . " jours</p>";
+            echo "<a class='btn-primary' href='trips_details.php?trip_id=" . urlencode($trip['id']) . "'>Voir plus</a>";
+            echo "</div>";
+        }
+    } else {
+        echo "<p>Aucun voyage disponible actuellement.</p>";
     }
     ?>
-</body>
-</html>
+</section>
 
-<!-- Page tableau de bord -->
-<?php
-if (!isset($_SESSION['user'])) {
-    header('Location: login.php');
-    exit;
-}
-?>
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Tableau de bord</title>
-</head>
-<body>
-    <h2>Bienvenue, <?php echo $_SESSION['user']['name']; ?>!</h2>
-    <a href="?logout=true">Se déconnecter</a>
-</body>
-</html>
+<!-- Bienvenue utilisateur -->
+<?php if (isset($_SESSION['user'])): ?>
+    <section>
+        <h2>Bonjour, <?= htmlspecialchars($_SESSION['user']['name']) ?></h2>
+        <p><a href="?logout=true" class="btn-primary">Se déconnecter</a></p>
+    </section>
+<?php endif; ?>
 
-<!-- Page détails voyage -->
-<?php
-$trips = loadTrips();
-$tripId = $_GET['id'] ?? null;
-$tripDetails = null;
-foreach ($trips as $trip) {
-    if ($trip['id'] == $tripId) {
-        $tripDetails = $trip;
-        break;
-    }
-}
-if (!$tripDetails) {
-    die('Voyage non trouvé.');
-}
-?>
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Détails du voyage</title>
-</head>
-<body>
-    <h2><?php echo $tripDetails['titre']; ?></h2>
-    <p>Prix: <?php echo $tripDetails['prix']; ?>€</p>
-    <p>Durée: <?php echo $tripDetails['duree']; ?> jours</p>
-    <p>Liste des étapes: <?php echo implode(", ", $tripDetails['etapes']); ?></p>
-    <a href="trips.php">Retour à la liste des voyages</a>
+<footer>
+    <p>&copy; 2025 My Trips</p>
+</footer>
 </body>
 </html>
