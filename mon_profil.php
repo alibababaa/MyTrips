@@ -35,7 +35,7 @@ function findTripById($trips, $id) {
 <body class="page-profil">
 
 <nav>
-    <div class="logo"><img alt="My Trips Logo" src="logo_my_trips.png"></div>
+    <div class="logo"><img src="logo_my_trips.png" alt="Logo My Trips"></div>
     <ul>
         <li><a href="accueil.php">Accueil</a></li>
         <li><a href="présentation.php">Présentation</a></li>
@@ -44,9 +44,8 @@ function findTripById($trips, $id) {
         <li><a href="mon_panier.php">Mon Panier</a></li>
         <li><a href="deconnexion.php">Se déconnecter</a></li>
         <li>
-            <button id="themeToggle" class="btn-primary" style="background-color: transparent; color: #ffd700; border: 2px solid #ffd700;">
-                🌓
-            </button>
+            <button id="themeToggle" class="btn-primary"
+                style="background-color: transparent; color: #ffd700; border: 2px solid #ffd700;">🌓</button>
         </li>
     </ul>
 </nav>
@@ -54,7 +53,7 @@ function findTripById($trips, $id) {
 <header class="banner">
     <div class="banner-content">
         <h1>Bienvenue, <?= htmlspecialchars($_SESSION['user']['name'] ?? $_SESSION['user']['login']) ?></h1>
-        <p>Vos réservations passées</p>
+        <p>Voici l’historique de vos réservations</p>
     </div>
 </header>
 
@@ -73,13 +72,12 @@ function findTripById($trips, $id) {
             <?php endif; ?>
         <?php endforeach; ?>
     <?php else: ?>
-        <p style="text-align: center;">Vous n'avez aucune réservation pour le moment.</p>
+        <p style="text-align: center;">Vous n'avez encore réservé aucun voyage.</p>
     <?php endif; ?>
 </section>
 
 <footer>
     <p>© 2025 My Trips. Tous droits réservés.</p>
 </footer>
-
 </body>
 </html>
