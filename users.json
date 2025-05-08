@@ -1,9 +1,44 @@
 [
-    {"login": "naruto@gmail.com", "password": "rasengan", "role": "admin", "name": "Naruto Uzumaki"},
-    {"login": "sasuke@gmail.com", "password": "chidori", "role": "admin", "name": "Sasuke Uchiha"},
-    {"login": "sakura@gmail.com", "password": "sakurapass", "role": "admin", "name": "Sakura Haruno"},
-    {"login": "light@gmail.com", "password": "kira", "role": "user", "name": "Light Yagami"},
-    {"login": "l@gmail.com", "password": "justice", "role": "user", "name": "L Lawliet"},
-    {"login": "ryuk@gmail.com", "password": "apples", "role": "user", "name": "Ryuk"},
-    {"login": "misa@gmail.com", "password": "idol", "role": "user", "name": "Misa Amane"}
+    {
+        "login": "naruto@gmail.com",
+        "password": "$2y$12$5dL9at3wNHYZ9vrw.k0QyO5GSdOhRny3X6.YYpProEB4K4e0Otxse",
+        "role": "admin",
+        "name": "Naruto Uzumaki"
+    },
+    {
+        "login": "sasuke@gmail.com",
+        "password": "$2y$12$hf6aFENXCjvq1OrtLYQL1.4bqOrsV8vlRvsfUiAqShtKXgWnZlOYi",
+        "role": "admin",
+        "name": "Sasuke Uchiha"
+    },
+    {
+        "login": "sakura@gmail.com",
+        "password": "$2y$12$Kl7B0znfNn1Vx2zAyksic.AVotsPTFE7MEuV9.iahjzX5ocE42B1e",
+        "role": "admin",
+        "name": "Sakura Haruno"
+    },
+    {
+        "login": "light@gmail.com",
+        "password": "$2y$12$b97J6dt0BUxu4B.6HTZTU.AjUJesqCH0Fr\/5p7jTGxqQ\/r36Ynxi.",
+        "role": "user",
+        "name": "Light Yagami"
+    },
+    {
+        "login": "l@gmail.com",
+        "password": "$2y$12$Nlap0hKRc1bYKZx2UABG4umWtQgyWhxcd0qDBNgxvR6Fg6qv09CYq",
+        "role": "user",
+        "name": "L Lawliet"
+    },
+    {
+        "login": "ryuk@gmail.com",
+        "password": "$2y$12$PYLBgApd7Se80ycTylTDGuleaMYosHzHDTZupSHCNmvMJQ\/QskXy.",
+        "role": "user",
+        "name": "Ryuk"
+    },
+    {
+        "login": "misa@gmail.com",
+        "password": "$2y$12$uPrUtHZu7YJAH5ujpLnEZ.x5q3fGtSzTIo2QH0gQQtcQa3O4jAjc.",
+        "role": "user",
+        "name": "Misa Amane"
+    }
 ]
