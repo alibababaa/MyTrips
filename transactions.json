@@ -33,5 +33,17 @@
         "trip_id": 9,
         "payment_date": "2025-05-08 19:20:41",
         "montant": 1250
+    },
+    {
+        "user_id": "light@gmail.com",
+        "trip_id": 1,
+        "payment_date": "2025-05-08 19:54:30",
+        "montant": 1050
+    },
+    {
+        "user_id": "yann@gmail.com",
+        "trip_id": 11,
+        "payment_date": "2025-05-08 20:18:34",
+        "montant": 1060
     }
 ]
