@@ -13,7 +13,6 @@ $tripsFile = __DIR__ . '/trips.json';
 $transactions = file_exists($transactionsFile) ? json_decode(file_get_contents($transactionsFile), true) : [];
 $trips = file_exists($tripsFile) ? json_decode(file_get_contents($tripsFile), true) : [];
 
-// ✅ Trouver le dernier paiement (à la seconde près)
 $latestPaymentTime = null;
 foreach (array_reverse($transactions) as $t) {
     if ($t['user_id'] === $userLogin) {
@@ -22,7 +21,6 @@ foreach (array_reverse($transactions) as $t) {
     }
 }
 
-// 🧾 Filtrer toutes les transactions ayant exactement ce timestamp
 $userRecentTrips = [];
 if ($latestPaymentTime) {
     foreach ($transactions as $t) {
@@ -47,10 +45,9 @@ function findTripTitle($trips, $id) {
     <link id="theme-stylesheet" rel="stylesheet" href="my_trips.css">
     <script src="theme.js" defer></script>
 </head>
-<body>
+<body class="page-confirmation">
 
 <nav>
-    <div class="logo"><img alt="My Trips Logo" src="logo_my_trips.png"></div>
     <ul>
         <li><a href="accueil.php">Accueil</a></li>
         <li><a href="présentation.php">Présentation</a></li>
@@ -59,8 +56,7 @@ function findTripTitle($trips, $id) {
         <li><a href="deconnexion.php">Se déconnecter</a></li>
         <li>
             <button id="themeToggle" class="btn-primary"
-                    style="background-color: transparent; color: #ffd700; border: 2px solid #ffd700;">🌓
-            </button>
+                    style="background-color: transparent; color: #ffd700; border: 2px solid #ffd700;">🌓</button>
         </li>
     </ul>
 </nav>
