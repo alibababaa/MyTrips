@@ -29,19 +29,21 @@ if (file_exists($file_path)) {
 <body>
 
 <nav>
+    <div class="logo"><img alt="My Trips Logo" src="logo_my_trips.png"></div>
     <ul>
         <li><a href="accueil.php">Accueil</a></li>
-        <li><a href="presentation.php">Présentation</a></li>
+        <li><a href="présentation.php">Présentation</a></li>
         <li><a href="rechercher.php">Rechercher</a></li>
         <li><a href="mon_profil.php">Mon Profil</a></li>
+        <li><a href="mon_panier.php">Mon Panier</a></li>
         <li><a href="deconnexion.php">Se déconnecter</a></li>
-        <li><a class="btn-primary" href="mon_panier.php">Mon Panier</a></li>
         <li>
             <button id="themeToggle" class="btn-primary"
-                style="background-color: transparent; color: #ffd700; border: 2px solid #ffd700;">🌓</button>
+                    style="background-color: transparent; color: #ffd700; border: 2px solid #ffd700;">🌓</button>
         </li>
     </ul>
 </nav>
+
 
 <header class="banner">
     <div class="banner-content">
