@@ -13,38 +13,44 @@ $tripsPath = __DIR__ . '/trips.json';
 $reservations = file_exists($reservationsPath) ? json_decode(file_get_contents($reservationsPath), true) : [];
 $trips = file_exists($tripsPath) ? json_decode(file_get_contents($tripsPath), true) : [];
 
-$userLogin = $_SESSION['user']['login'];
+$userLogin = $_SESSION['user']['login'] ?? '';
 
 // Filtrer les réservations de l'utilisateur actuel
-$userTrips = array_filter($reservations, function($res) use ($userLogin) {
-    return $res['user_id'] === $userLogin;
+$userTrips = array_filter($reservations, function ($res) use ($userLogin) {
+    return isset($res['user_id']) && $res['user_id'] === $userLogin;
 });
 
 // Fonction pour retrouver les infos du voyage par ID
 function findTripById($trips, $id) {
     foreach ($trips as $trip) {
-        if ($trip['id'] == $id) {
+        if (isset($trip['id']) && $trip['id'] == $id) {
             return $trip;
         }
     }
     return null;
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <title>Mon Profil</title>
-    <link rel="stylesheet" href="my_trips.css">
+    <link id="theme-stylesheet" rel="stylesheet" href="my_trips.css">
+    <script src="theme.js" defer></script>
 </head>
-<body>
+<body class="page-profil">
+
 <nav>
     <ul>
         <li><a href="accueil.php">Accueil</a></li>
         <li><a href="présentation.php">Présentation</a></li>
         <li><a href="rechercher.php">Rechercher</a></li>
         <li><a href="deconnexion.php">Se déconnecter</a></li>
+        <li>
+            <button id="themeToggle" class="btn-primary" style="background-color: transparent; color: #ffd700; border: 2px solid #ffd700;">
+                🌓
+            </button>
+        </li>
     </ul>
 </nav>
 
@@ -55,9 +61,9 @@ function findTripById($trips, $id) {
     </div>
 </header>
 
-<section class="destinations" style="display: flex; flex-wrap: wrap;">
+<section class="destinations" style="display: flex; flex-wrap: wrap; justify-content: center;">
     <?php if (!empty($userTrips)): ?>
-        <?php foreach ($userTrips as $res): 
+        <?php foreach ($userTrips as $res):
             $trip = findTripById($trips, $res['trip_id']);
             if ($trip): ?>
                 <div class="destination-card">
@@ -65,17 +71,18 @@ function findTripById($trips, $id) {
                     <h3><?= htmlspecialchars($trip['titre']) ?></h3>
                     <p><strong>Durée :</strong> <?= htmlspecialchars($trip['duree']) ?> jours</p>
                     <p><strong>Prix :</strong> <?= htmlspecialchars($trip['prix']) ?> €</p>
-                    <p><strong>Date de réservation :</strong> <?= htmlspecialchars($res['payment_date']) ?></p>
+                    <p><strong>Date de réservation :</strong> <?= htmlspecialchars($res['payment_date'] ?? '-') ?></p>
                 </div>
             <?php endif; ?>
         <?php endforeach; ?>
     <?php else: ?>
-        <p>Vous n'avez aucune réservation pour le moment.</p>
+        <p style="text-align: center;">Vous n'avez aucune réservation pour le moment.</p>
     <?php endif; ?>
 </section>
 
 <footer>
     <p>© 2025 My Trips. Tous droits réservés.</p>
 </footer>
+
 </body>
 </html>
