@@ -59,7 +59,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['card_number'], $_POST
 
         file_put_contents($transactions_path, json_encode($transactions, JSON_PRETTY_PRINT));
 
-        // ✅ On vide le panier si la source est le panier
         if (isset($_POST['trip_ids']) && isset($_SESSION['panier'])) {
             unset($_SESSION['panier']);
         }
@@ -80,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['card_number'], $_POST
     <link id="theme-stylesheet" rel="stylesheet" href="my_trips.css">
     <script src="theme.js" defer></script>
 </head>
-<body>
+<body class="page-paiement">
 <nav>
     <ul>
         <li><a href="accueil.php">Accueil</a></li>
