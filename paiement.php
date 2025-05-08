@@ -6,42 +6,63 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 
-if (!isset($_POST['trip_id']) && !isset($_GET['trip_id'])) {
+$file_path = __DIR__ . '/trips.json';
+$trips = json_decode(file_get_contents($file_path), true);
+if (!is_array($trips)) $trips = [];
+
+function findTripById($trips, $id) {
+    foreach ($trips as $trip) {
+        if ($trip['id'] == $id) return $trip;
+    }
+    return null;
+}
+
+$selectedTrips = [];
+$tripIdsFromForm = $_POST['trip_ids'] ?? ($_POST['trip_id'] ?? null);
+
+// 📥 Récupération des voyages sélectionnés
+if (!empty($tripIdsFromForm)) {
+    if (!is_array($tripIdsFromForm)) {
+        $tripIdsFromForm = [$tripIdsFromForm];
+    }
+
+    foreach ($tripIdsFromForm as $tripId) {
+        $trip = findTripById($trips, $tripId);
+        if ($trip) {
+            $selectedTrips[] = $trip;
+        }
+    }
+
+    if (empty($selectedTrips)) {
+        exit("Erreur : Aucun voyage valide sélectionné.");
+    }
+} else {
     exit("Erreur : Aucun voyage sélectionné.");
 }
 
-$tripId = $_POST['trip_id'] ?? $_GET['trip_id'];
-$file_path = __DIR__ . '/trips.json';
-$trips = json_decode(file_get_contents($file_path), true);
-
-$selectedTrip = null;
-foreach ($trips as $trip) {
-    if ($trip['id'] == $tripId) {
-        $selectedTrip = $trip;
-        break;
-    }
-}
-
-if (!$selectedTrip) {
-    exit("Erreur : Voyage introuvable.");
-}
-
+// 💳 Traitement du paiement
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['card_number'], $_POST['card_owner'], $_POST['expiry_date'], $_POST['cvv'])) {
     $paymentSuccessful = true; // Simulation
 
     if ($paymentSuccessful) {
-        $transaction = [
-            'user_id' => $_SESSION['user']['login'],
-            'trip_id' => $selectedTrip['id'],
-            'payment_date' => date('Y-m-d H:i:s'),
-            'montant' => $selectedTrip['prix']
-        ];
-
         $transactions_path = __DIR__ . '/transactions.json';
         $transactions = file_exists($transactions_path) ? json_decode(file_get_contents($transactions_path), true) : [];
-        $transactions[] = $transaction;
+
+        foreach ($selectedTrips as $trip) {
+            $transactions[] = [
+                'user_id' => $_SESSION['user']['login'],
+                'trip_id' => $trip['id'],
+                'payment_date' => date('Y-m-d H:i:s'),
+                'montant' => $trip['prix']
+            ];
+        }
 
         file_put_contents($transactions_path, json_encode($transactions, JSON_PRETTY_PRINT));
+
+        // ✅ On vide le panier si la source est le panier
+        if (isset($_POST['trip_ids']) && isset($_SESSION['panier'])) {
+            unset($_SESSION['panier']);
+        }
 
         header('Location: confirmation.php');
         exit;
@@ -69,23 +90,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['card_number'], $_POST
         <li><a href="deconnexion.php">Se déconnecter</a></li>
         <li>
             <button id="themeToggle" class="btn-primary"
-                    style="background-color: transparent; color: #ffd700; border: 2px solid #ffd700;">🌓
-            </button>
+                    style="background-color: transparent; color: #ffd700; border: 2px solid #ffd700;">🌓</button>
         </li>
     </ul>
 </nav>
 
 <header class="banner">
     <div class="banner-content">
-        <h1>Récapitulatif du Voyage</h1>
-        <p>Détails de votre sélection</p>
+        <h1>Récapitulatif</h1>
+        <p>Voyages sélectionnés pour le paiement</p>
     </div>
 </header>
 
-<section class="trip-summary">
-    <h2><?= htmlspecialchars($selectedTrip['titre']) ?></h2>
-    <p><strong>Durée :</strong> <?= htmlspecialchars($selectedTrip['duree']) ?> jours</p>
-    <p><strong>Prix :</strong> <?= htmlspecialchars($selectedTrip['prix']) ?> €</p>
+<section class="trip-summary" style="max-width: 800px; margin: auto;">
+    <?php foreach ($selectedTrips as $trip): ?>
+        <div style="border: 1px solid #ddd; padding: 1em; margin: 1em 0; border-radius: 10px;">
+            <h3><?= htmlspecialchars($trip['titre']) ?></h3>
+            <p><strong>Durée :</strong> <?= htmlspecialchars($trip['duree']) ?> jours</p>
+            <p><strong>Prix :</strong> <?= htmlspecialchars($trip['prix']) ?> €</p>
+        </div>
+    <?php endforeach; ?>
 </section>
 
 <h2 style="text-align: center;">Formulaire de Paiement</h2>
@@ -104,7 +128,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['card_number'], $_POST
     <label for="cvv">Valeur de contrôle (CVV - 3 chiffres)</label>
     <input type="text" name="cvv" id="cvv" pattern="\d{3}" required placeholder="123">
 
-    <input type="hidden" name="trip_id" value="<?= htmlspecialchars($selectedTrip['id']) ?>">
+    <?php foreach ($selectedTrips as $trip): ?>
+        <input type="hidden" name="trip_ids[]" value="<?= htmlspecialchars($trip['id']) ?>">
+    <?php endforeach; ?>
 
     <button type="submit" class="btn-primary">Payer</button>
 </form>
@@ -112,6 +138,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['card_number'], $_POST
 <footer>
     <p>&copy; 2025 My Trips. Tous droits réservés.</p>
 </footer>
-
 </body>
 </html>
