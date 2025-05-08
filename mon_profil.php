@@ -6,7 +6,6 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 
-// Chargement sécurisé des fichiers JSON
 $reservationsPath = __DIR__ . '/transactions.json';
 $tripsPath = __DIR__ . '/trips.json';
 
@@ -15,17 +14,13 @@ $trips = file_exists($tripsPath) ? json_decode(file_get_contents($tripsPath), tr
 
 $userLogin = $_SESSION['user']['login'] ?? '';
 
-// Filtrer les réservations de l'utilisateur actuel
-$userTrips = array_filter($reservations, function ($res) use ($userLogin) {
-    return isset($res['user_id']) && $res['user_id'] === $userLogin;
-});
+// Filtrer les réservations de l'utilisateur et trier par date descendante
+$userTrips = array_filter($reservations, fn($res) => $res['user_id'] === $userLogin);
+usort($userTrips, fn($a, $b) => strtotime($b['payment_date']) <=> strtotime($a['payment_date']));
 
-// Fonction pour retrouver les infos du voyage par ID
 function findTripById($trips, $id) {
     foreach ($trips as $trip) {
-        if (isset($trip['id']) && $trip['id'] == $id) {
-            return $trip;
-        }
+        if ($trip['id'] == $id) return $trip;
     }
     return null;
 }
@@ -71,7 +66,7 @@ function findTripById($trips, $id) {
                     <h3><?= htmlspecialchars($trip['titre']) ?></h3>
                     <p><strong>Durée :</strong> <?= htmlspecialchars($trip['duree']) ?> jours</p>
                     <p><strong>Prix :</strong> <?= htmlspecialchars($trip['prix']) ?> €</p>
-                    <p><strong>Date de réservation :</strong> <?= htmlspecialchars($res['payment_date'] ?? '-') ?></p>
+                    <p><strong>Réservé le :</strong> <?= date('d/m/Y H:i', strtotime($res['payment_date'] ?? '')) ?></p>
                 </div>
             <?php endif; ?>
         <?php endforeach; ?>
