@@ -1,60 +1,44 @@
 <?php
 session_start();
 
+if (!isset($_SESSION['user'])) {
+    header("Location: connexion.php");
+    exit();
+}
+
 $file_path = __DIR__ . '/trips.json';
 
-// Vérifie si le fichier existe et peut être lu
-if (file_exists($file_path) && is_readable($file_path)) {
-    $json_content = file_get_contents($file_path);
-
-    // Vérifie si le contenu du fichier a été correctement lu
-    if ($json_content !== false) {
-        $trips = json_decode($json_content, true);
-
-        // Vérifie si le décodage JSON a réussi
-        if ($trips === null && json_last_error() !== JSON_ERROR_NONE) {
-            echo "Erreur de décodage JSON: " . json_last_error_msg();
-        }
-    } else {
-        echo "Erreur lors de la lecture du fichier JSON.";
-    }
-} else {
-    echo "Le fichier trips.json est introuvable ou inaccessible.";
-}
-
-// Vérifie si la variable $trips est bien définie avant de l'utiliser
-if (!isset($trips) || !is_array($trips)) {
-    $trips = [];
-    echo "Aucun voyage disponible.";
-}
-
-// Sélection du voyage si trip_id est présent en paramètre GET
-$selectedTrip = null;
-if (isset($_GET['trip_id'])) {
-    foreach ($trips as $trip) {
-        if ($trip['id'] == $_GET['trip_id']) {
-            $selectedTrip = $trip;
-            break;
-        }
+$trips = [];
+if (file_exists($file_path)) {
+    $json = file_get_contents($file_path);
+    $trips = json_decode($json, true);
+    if (!is_array($trips)) {
+        $trips = [];
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <title>Réserver un Voyage</title>
     <link rel="stylesheet" href="my_trips.css">
+    <link id="theme-stylesheet" rel="stylesheet" href="my_trips.css">
+    <script src="theme.js" defer></script>
 </head>
 <body>
+
 <nav>
     <ul>
         <li><a href="accueil.php">Accueil</a></li>
-        <li><a href="présentation.php">Présentation</a></li>
+        <li><a href="presentation.php">Présentation</a></li>
         <li><a href="rechercher.php">Rechercher</a></li>
         <li><a href="mon_profil.php">Mon Profil</a></li>
         <li><a href="deconnexion.php">Se déconnecter</a></li>
+        <li>
+            <button id="themeToggle" class="btn-primary"
+                style="background-color: transparent; color: #ffd700; border: 2px solid #ffd700;">🌓</button>
+        </li>
     </ul>
 </nav>
 
@@ -80,26 +64,13 @@ if (isset($_GET['trip_id'])) {
             </div>
         <?php endforeach; ?>
     <?php else: ?>
-        <p>Aucun voyage disponible.</p>
+        <p>Aucun voyage disponible actuellement.</p>
     <?php endif; ?>
 </section>
-
-<?php if ($selectedTrip): ?>
-    <section class="selected-trip">
-        <h2><?= htmlspecialchars($selectedTrip['titre']) ?></h2>
-        <img src="<?= htmlspecialchars($selectedTrip['image']) ?>" alt="<?= htmlspecialchars($selectedTrip['titre']) ?>">
-        <p><strong>Prix :</strong> <?= htmlspecialchars($selectedTrip['prix']) ?> €</p>
-        <p><strong>Durée :</strong> <?= htmlspecialchars($selectedTrip['duree']) ?> jours</p>
-
-        <form action="paiement.php" method="POST">
-            <input type="hidden" name="trip_id" value="<?= htmlspecialchars($selectedTrip['id']) ?>">
-            <button type="submit" class="btn-primary">Confirmer la réservation</button>
-        </form>
-    </section>
-<?php endif; ?>
 
 <footer>
     <p>© 2025 My Trips. Tous droits réservés.</p>
 </footer>
+
 </body>
 </html>
