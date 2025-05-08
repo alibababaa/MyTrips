@@ -31,10 +31,13 @@ function findTripById($trips, $id) {
 <body>
 
 <nav>
+    <div class="logo"><img alt="My Trips Logo" src="logo_my_trips.png"></div>
     <ul>
         <li><a href="accueil.php">Accueil</a></li>
-        <li><a href="reserver.php">Réserver</a></li>
+        <li><a href="présentation.php">Présentation</a></li>
+        <li><a href="rechercher.php">Rechercher</a></li>
         <li><a href="mon_profil.php">Mon Profil</a></li>
+        <li><a class="active" href="mon_panier.php">Mon Panier</a></li>
         <li><a href="deconnexion.php">Se déconnecter</a></li>
         <li>
             <button id="themeToggle" class="btn-primary" style="background-color: transparent; color: #ffd700; border: 2px solid #ffd700;">🌓</button>
@@ -76,7 +79,6 @@ function findTripById($trips, $id) {
                 <button type="submit" class="btn-primary">Passer au paiement 💳</button>
             </form>
         </div>
-
 
     <?php else: ?>
         <p style="text-align: center;">Votre panier est vide.</p>
