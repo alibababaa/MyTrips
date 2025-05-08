@@ -8,10 +8,8 @@ session_start();
     <title>Erreur de Paiement - My Trips</title>
     <link id="theme-stylesheet" rel="stylesheet" href="my_trips.css">
     <script src="theme.js" defer></script>
-    <link href="https://fonts.googleapis.com" rel="preconnect">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="page-erreur">
 
 <nav>
     <ul>
