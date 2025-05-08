@@ -12,11 +12,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $users = json_decode(file_get_contents($usersFile), true);
 
         foreach ($users as $user) {
-            if ($user['login'] === $email && $user['password'] === $password) {
+            if ($user['login'] === $email && password_verify($password, $user['password'])) {
                 $_SESSION['user'] = $user;
 
-                // 🔁 Redirection selon le rôle
-                if (isset($user['role']) && $user['role'] === 'admin') {
+                if ($user['role'] === 'admin') {
                     header("Location: admin.php");
                 } else {
                     header("Location: accueil.php");
@@ -31,22 +30,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <title>Connexion - My Trips</title>
-    <link rel="stylesheet" href="my_trips.css">
+    <link id="theme-stylesheet" rel="stylesheet" href="my_trips.css">
+    <script src="theme.js" defer></script>
 </head>
-<body>
+<body class="page-connexion">
 
 <nav>
+    <div class="logo"><img alt="My Trips Logo" src="logo_my_trips.png"></div>
     <ul>
         <li><a href="accueil.php">Accueil</a></li>
         <li><a href="présentation.php">Présentation</a></li>
         <li><a href="rechercher.php">Rechercher</a></li>
+        <li><a class="active" href="connexion.php">Se connecter</a></li>
         <li><a href="inscription.php">S'inscrire</a></li>
+        <li><a class="btn-primary" href="reserver.php">Réserver</a></li>
+        <li>
+            <button id="themeToggle" class="btn-primary"
+                    style="background-color: transparent; color: #ffd700; border: 2px solid #ffd700;">
+                🌓
+            </button>
+        </li>
     </ul>
 </nav>
 
@@ -86,5 +94,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <footer>
     <p>© 2025 My Trips. Tous droits réservés.</p>
 </footer>
+
 </body>
 </html>
