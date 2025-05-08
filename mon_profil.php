@@ -14,7 +14,6 @@ $trips = file_exists($tripsPath) ? json_decode(file_get_contents($tripsPath), tr
 
 $userLogin = $_SESSION['user']['login'] ?? '';
 
-// Filtrer les réservations de l'utilisateur et trier par date descendante
 $userTrips = array_filter($reservations, fn($res) => $res['user_id'] === $userLogin);
 usort($userTrips, fn($a, $b) => strtotime($b['payment_date']) <=> strtotime($a['payment_date']));
 
@@ -36,10 +35,13 @@ function findTripById($trips, $id) {
 <body class="page-profil">
 
 <nav>
+    <div class="logo"><img alt="My Trips Logo" src="logo_my_trips.png"></div>
     <ul>
         <li><a href="accueil.php">Accueil</a></li>
         <li><a href="présentation.php">Présentation</a></li>
         <li><a href="rechercher.php">Rechercher</a></li>
+        <li><a class="active" href="mon_profil.php">Mon Profil</a></li>
+        <li><a href="mon_panier.php">Mon Panier</a></li>
         <li><a href="deconnexion.php">Se déconnecter</a></li>
         <li>
             <button id="themeToggle" class="btn-primary" style="background-color: transparent; color: #ffd700; border: 2px solid #ffd700;">
