@@ -1,1 +1,13 @@
-[]
+[
+    {
+        "user_id": "ali@gmail.com",
+        "trip_id": "1",
+        "payment_date": "2025-05-08 15:20:48"
+    },
+    {
+        "user_id": "ali@gmail.com",
+        "trip_id": 4,
+        "payment_date": "2025-05-08 16:36:22",
+        "montant": 1200
+    }
+]
