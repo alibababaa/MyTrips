@@ -6,18 +6,14 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 
-// Vérification du trip_id envoyé depuis reserver.php
 if (!isset($_POST['trip_id']) && !isset($_GET['trip_id'])) {
     exit("Erreur : Aucun voyage sélectionné.");
 }
 
 $tripId = $_POST['trip_id'] ?? $_GET['trip_id'];
-
-// Chargement du fichier trips.json
 $file_path = __DIR__ . '/trips.json';
 $trips = json_decode(file_get_contents($file_path), true);
 
-// Trouver les informations du voyage
 $selectedTrip = null;
 foreach ($trips as $trip) {
     if ($trip['id'] == $tripId) {
@@ -30,14 +26,10 @@ if (!$selectedTrip) {
     exit("Erreur : Voyage introuvable.");
 }
 
-// Traitement du paiement uniquement après soumission du formulaire bancaire
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['card_number'], $_POST['card_owner'], $_POST['expiry_date'], $_POST['cvv'])) {
-
-    // Logique réelle de vérification du paiement (à remplacer par une vraie vérification bancaire)
     $paymentSuccessful = true; // Simulation
 
     if ($paymentSuccessful) {
-        // Enregistrement sécurisé dans transactions.json
         $transaction = [
             'user_id' => $_SESSION['user']['login'],
             'trip_id' => $selectedTrip['id'],
@@ -51,20 +43,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['card_number'], $_POST
 
         file_put_contents($transactions_path, json_encode($transactions, JSON_PRETTY_PRINT));
 
-        echo "<p class='success'>Paiement réussi et réservation enregistrée.</p>";
-        exit; // Important : évite que le formulaire ne réapparaisse après succès
+        header('Location: confirmation.php');
+        exit;
     } else {
-        echo "<p class='error'>Erreur lors du paiement. Veuillez réessayer.</p>";
+        header('Location: erreurpaiement.php');
+        exit;
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="utf-8">
     <title>Paiement - My Trips</title>
-    <link rel="stylesheet" href="my_trips.css">
+    <link id="theme-stylesheet" rel="stylesheet" href="my_trips.css">
+    <script src="theme.js" defer></script>
 </head>
 <body>
 <nav>
@@ -74,11 +67,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['card_number'], $_POST
         <li><a href="rechercher.php">Rechercher</a></li>
         <li><a href="mon_profil.php">Mon Profil</a></li>
         <li><a href="deconnexion.php">Se déconnecter</a></li>
+        <li>
+            <button id="themeToggle" class="btn-primary"
+                    style="background-color: transparent; color: #ffd700; border: 2px solid #ffd700;">🌓
+            </button>
+        </li>
     </ul>
 </nav>
 
-<header>
-    <h1>Récapitulatif du Voyage</h1>
+<header class="banner">
+    <div class="banner-content">
+        <h1>Récapitulatif du Voyage</h1>
+        <p>Détails de votre sélection</p>
+    </div>
 </header>
 
 <section class="trip-summary">
@@ -87,8 +88,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['card_number'], $_POST
     <p><strong>Prix :</strong> <?= htmlspecialchars($selectedTrip['prix']) ?> €</p>
 </section>
 
-<h2>Formulaire de Paiement</h2>
-<form action="paiement.php" method="POST">
+<h2 style="text-align: center;">Formulaire de Paiement</h2>
+<form action="paiement.php" method="POST" style="max-width: 600px; margin: 2em auto;">
     <h3>Coordonnées Bancaires</h3>
 
     <label for="card_number">Numéro de carte (16 chiffres)</label>
