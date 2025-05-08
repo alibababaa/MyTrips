@@ -7,15 +7,8 @@ if (!isset($_SESSION['user'])) {
 }
 
 $file_path = __DIR__ . '/trips.json';
-
-$trips = [];
-if (file_exists($file_path)) {
-    $json = file_get_contents($file_path);
-    $trips = json_decode($json, true);
-    if (!is_array($trips)) {
-        $trips = [];
-    }
-}
+$trips = file_exists($file_path) ? json_decode(file_get_contents($file_path), true) : [];
+if (!is_array($trips)) $trips = [];
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -26,10 +19,10 @@ if (file_exists($file_path)) {
     <link id="theme-stylesheet" rel="stylesheet" href="my_trips.css">
     <script src="theme.js" defer></script>
 </head>
-<body>
+<body class="page-reserver">
 
 <nav>
-    <div class="logo"><img alt="My Trips Logo" src="logo_my_trips.png"></div>
+    <div class="logo"><img src="logo_my_trips.png" alt="Logo My Trips"></div>
     <ul>
         <li><a href="accueil.php">Accueil</a></li>
         <li><a href="présentation.php">Présentation</a></li>
@@ -43,7 +36,6 @@ if (file_exists($file_path)) {
         </li>
     </ul>
 </nav>
-
 
 <header class="banner">
     <div class="banner-content">
@@ -66,7 +58,6 @@ if (file_exists($file_path)) {
                     <button type="submit" class="btn-primary">Réserver ce voyage</button>
                 </form>
 
-                <!-- 🛒 Bouton pour ajouter au panier -->
                 <form action="ajouter_panier.php" method="GET">
                     <input type="hidden" name="trip_id" value="<?= htmlspecialchars($trip['id']) ?>">
                     <button type="submit" class="btn-primary" style="background-color: #444;">Ajouter au panier 🛒</button>
@@ -74,13 +65,12 @@ if (file_exists($file_path)) {
             </div>
         <?php endforeach; ?>
     <?php else: ?>
-        <p>Aucun voyage disponible actuellement.</p>
+        <p style="text-align: center;">Aucun voyage disponible pour le moment.</p>
     <?php endif; ?>
 </section>
 
 <footer>
     <p>© 2025 My Trips. Tous droits réservés.</p>
 </footer>
-
 </body>
 </html>
