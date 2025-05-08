@@ -1,7 +1,11 @@
 <?php
+// ✅ Affichage des erreurs pour t’aider en développement
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 session_start();
 
-$usersFile = 'users.json';
+$usersFile = __DIR__ . '/users.json';
 $erreur = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -9,22 +13,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
 
     if (file_exists($usersFile)) {
-        $users = json_decode(file_get_contents($usersFile), true);
+        $jsonData = file_get_contents($usersFile);
+        $users = json_decode($jsonData, true);
 
-        foreach ($users as $user) {
-            if ($user['login'] === $email && password_verify($password, $user['password'])) {
-                $_SESSION['user'] = $user;
+        if ($users === null) {
+            $erreur = "Erreur de lecture JSON : " . json_last_error_msg();
+        } else {
+            foreach ($users as $user) {
+                if ($user['login'] === $email && password_verify($password, $user['password'])) {
+                    
+                    $_SESSION['user'] = $user;
 
-                if ($user['role'] === 'admin') {
-                    header("Location: admin.php");
-                } else {
-                    header("Location: accueil.php");
+                    if ($user['role'] === 'admin') {
+                        header("Location: admin.php");
+                    } else {
+                        header("Location: accueil.php");
+                    }
+                    exit();
                 }
-                exit();
             }
-        }
 
-        $erreur = "Identifiants incorrects.";
+            $erreur = "Identifiants incorrects.";
+        }
     } else {
         $erreur = "Fichier utilisateurs introuvable.";
     }
