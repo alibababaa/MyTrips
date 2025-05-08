@@ -35,6 +35,7 @@ if (file_exists($file_path)) {
         <li><a href="rechercher.php">Rechercher</a></li>
         <li><a href="mon_profil.php">Mon Profil</a></li>
         <li><a href="deconnexion.php">Se déconnecter</a></li>
+        <li><a class="btn-primary" href="mon_panier.php">Mon Panier</a></li>
         <li>
             <button id="themeToggle" class="btn-primary"
                 style="background-color: transparent; color: #ffd700; border: 2px solid #ffd700;">🌓</button>
@@ -57,9 +58,16 @@ if (file_exists($file_path)) {
                 <h3><?= htmlspecialchars($trip['titre']) ?></h3>
                 <p><strong>Durée :</strong> <?= htmlspecialchars($trip['duree']) ?> jours</p>
                 <p><strong>Prix :</strong> <?= htmlspecialchars($trip['prix']) ?> €</p>
-                <form action="paiement.php" method="POST">
+
+                <form action="paiement.php" method="POST" style="margin-bottom: 0.5em;">
                     <input type="hidden" name="trip_id" value="<?= htmlspecialchars($trip['id']) ?>">
                     <button type="submit" class="btn-primary">Réserver ce voyage</button>
+                </form>
+
+                <!-- 🛒 Bouton pour ajouter au panier -->
+                <form action="ajouter_panier.php" method="GET">
+                    <input type="hidden" name="trip_id" value="<?= htmlspecialchars($trip['id']) ?>">
+                    <button type="submit" class="btn-primary" style="background-color: #444;">Ajouter au panier 🛒</button>
                 </form>
             </div>
         <?php endforeach; ?>
