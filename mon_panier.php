@@ -13,9 +13,7 @@ $panier = $_SESSION['panier'] ?? [];
 
 function findTripById($trips, $id) {
     foreach ($trips as $trip) {
-        if ($trip['id'] == $id) {
-            return $trip;
-        }
+        if ($trip['id'] == $id) return $trip;
     }
     return null;
 }
@@ -25,22 +23,22 @@ function findTripById($trips, $id) {
 <head>
     <meta charset="UTF-8">
     <title>Mon Panier - My Trips</title>
-    <link rel="stylesheet" href="my_trips.css">
+    <link id="theme-stylesheet" rel="stylesheet" href="my_trips.css">
     <script src="theme.js" defer></script>
 </head>
-<body>
+<body class="page-panier">
 
 <nav>
-    <div class="logo"><img alt="My Trips Logo" src="logo_my_trips.png"></div>
+    <div class="logo"><img src="logo_my_trips.png" alt="Logo My Trips"></div>
     <ul>
         <li><a href="accueil.php">Accueil</a></li>
-        <li><a href="présentation.php">Présentation</a></li>
-        <li><a href="rechercher.php">Rechercher</a></li>
+        <li><a href="reserver.php">Réserver</a></li>
         <li><a href="mon_profil.php">Mon Profil</a></li>
         <li><a class="active" href="mon_panier.php">Mon Panier</a></li>
         <li><a href="deconnexion.php">Se déconnecter</a></li>
         <li>
-            <button id="themeToggle" class="btn-primary" style="background-color: transparent; color: #ffd700; border: 2px solid #ffd700;">🌓</button>
+            <button id="themeToggle" class="btn-primary"
+                    style="background-color: transparent; color: #ffd700; border: 2px solid #ffd700;">🌓</button>
         </li>
     </ul>
 </nav>
@@ -79,7 +77,6 @@ function findTripById($trips, $id) {
                 <button type="submit" class="btn-primary">Passer au paiement 💳</button>
             </form>
         </div>
-
     <?php else: ?>
         <p style="text-align: center;">Votre panier est vide.</p>
     <?php endif; ?>
@@ -88,6 +85,5 @@ function findTripById($trips, $id) {
 <footer>
     <p>© 2025 My Trips. Tous droits réservés.</p>
 </footer>
-
 </body>
 </html>
