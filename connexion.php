@@ -47,6 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Connexion - My Trips</title>
     <link id="theme-stylesheet" rel="stylesheet" href="my_trips.css">
     <script src="theme.js" defer></script>
+    <script src="password-toggle.js" defer></script>
 </head>
 <body class="page-connexion">
 
@@ -86,8 +87,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <label for="email">Identifiant :</label>
         <input type="text" name="email" id="email" required>
 
-        <label for="password">Mot de passe :</label>
-        <input type="password" name="password" id="password" required>
+      <label for="password">Mot de passe :</label>
+<div class="password-container">
+    <input type="password" name="password" id="password" required>
+    <span onclick="togglePassword('password')" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;">👁️</span>
+</div>
+
 
         <button type="submit" class="btn-primary">Connexion</button>
     </form>
