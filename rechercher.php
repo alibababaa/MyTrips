@@ -1,18 +1,40 @@
 <?php
 session_start();
 
+$trips_data = file_get_contents('trips.json');
+$all_trips = json_decode($trips_data, true);
 $resultats = [];
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $destination = $_POST['destination'] ?? '';
     $date_depart = $_POST['date'] ?? '';
     $options     = $_POST['options'] ?? '';
 
-    // Ce bloc est à remplacer par une vraie logique de recherche dans trips.json
-    if (!empty($destination)) {
-        $resultats[] = "Voyage à $destination prévu à partir du $date_depart avec option : $options.";
-    } else {
-        $resultats[] = "Veuillez préciser une destination.";
+    // Filtrage simple par destination
+    foreach ($all_trips as $trip) {
+    $match = true;
+
+    // Si une destination est fournie, on filtre dessus
+    if (!empty($destination) && strcasecmp($trip['titre'], $destination) !== 0) {
+        $match = false;
     }
+
+    // Si un filtre date est fourni, on l’ajoute à chaque résultat
+    if (!empty($date_depart)) {
+        $trip['date'] = $date_depart;
+    } else {
+        $trip['date'] = date('Y-m-d');
+    }
+
+    // Ajout d’options et d’étapes simulées
+    $trip['options'] = $options;
+    $trip['etapes'] = rand(1, 5);
+
+    if ($match) {
+        $resultats[] = $trip;
+    }
+}
+
 }
 ?>
 <!DOCTYPE html>
@@ -33,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <div class="logo"><img alt="My Trips Logo" src="logo_my_trips.png"/></div>
   <ul>
     <li><a href="accueil.php">Accueil</a></li>
-    <li><a href="presentation.php">Présentation</a></li>
+    <li><a href="présentation.php">Présentation</a></li>
     <li><a class="active" href="rechercher.php">Rechercher</a></li>
     <?php if (isset($_SESSION['user'])): ?>
       <li><a href="mon_profil.php">Mon Profil</a></li>
@@ -60,18 +82,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <h2>Filtrez votre recherche</h2>
   <form method="POST">
     <label for="destination">Destination :</label>
-    <select id="destination" name="destination" required>
+    <select id="destination" name="destination" >
       <option value="">-- Choisissez une destination --</option>
-      <option value="Ouidah">Ouidah</option>
-      <option value="Porto-Novo">Porto-Novo</option>
-      <option value="Abomey">Abomey</option>
-      <option value="Ganvié">Ganvié</option>
-      <option value="Grand-Popo">Grand-Popo</option>
-      <option value="Parakou">Parakou</option>
-      <option value="Natitingou">Natitingou</option>
-      <option value="Dassa">Dassa</option>
-      <option value="Tanguiéta">Tanguiéta</option>
-      <option value="Possotomé">Possotomé</option>
+      <?php foreach ($all_trips as $trip): ?>
+        <option value="<?= htmlspecialchars($trip['titre']) ?>"><?= htmlspecialchars($trip['titre']) ?></option>
+      <?php endforeach; ?>
     </select>
 
     <label for="date">Date de départ :</label>
@@ -93,12 +108,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <?php if ($_SERVER['REQUEST_METHOD'] === 'POST'): ?>
   <section class="search-results">
     <h2>Résultats de la recherche</h2>
+
     <?php if (!empty($resultats)): ?>
-      <ul>
-        <?php foreach ($resultats as $resultat): ?>
-          <li><?= htmlspecialchars($resultat) ?></li>
+
+      <!-- Menu de tri -->
+      <div style="text-align: right; margin-bottom: 1em;">
+        <label for="sort-select"><strong>Trier par :</strong></label>
+        <select id="sort-select">
+          <option value="date">Date</option>
+          <option value="price">Prix</option>
+          <option value="duration">Durée</option>
+          <option value="steps">Étapes</option>
+        </select>
+      </div>
+
+      <!-- Cartes -->
+      <div class="destinations">
+        <?php foreach ($resultats as $trip): ?>
+          <div class="trip-card"
+               data-date="<?= htmlspecialchars($trip['date']) ?>"
+               data-price="<?= htmlspecialchars($trip['prix']) ?>"
+               data-duration="<?= htmlspecialchars($trip['duree']) ?>"
+               data-steps="<?= htmlspecialchars($trip['etapes']) ?>">
+            <img src="<?= htmlspecialchars($trip['image']) ?>" alt="<?= htmlspecialchars($trip['titre']) ?>" style="width:100%; height:180px; object-fit:cover;">
+            <h3><?= htmlspecialchars($trip['titre']) ?></h3>
+            <p>Départ : <?= htmlspecialchars($trip['date']) ?></p>
+            <p>Prix : <?= htmlspecialchars($trip['prix']) ?> €</p>
+            <p>Durée : <?= htmlspecialchars($trip['duree']) ?> jours</p>
+            <p>Étapes : <?= htmlspecialchars($trip['etapes']) ?></p>
+          </div>
         <?php endforeach; ?>
-      </ul>
+      </div>
+
     <?php else: ?>
       <p>Aucun résultat trouvé.</p>
     <?php endif; ?>
@@ -110,5 +151,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <p>© 2025 My Trips. Tous droits réservés.</p>
 </footer>
 
+<!-- Scripts -->
+<script src="tri.js"></script>
 </body>
 </html>
