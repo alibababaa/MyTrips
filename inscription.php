@@ -54,6 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <title>Inscription - My Trips</title>
   <link id="theme-stylesheet" rel="stylesheet" href="my_trips.css">
   <script src="theme.js" defer></script>
+  <script src="password-toggle.js" defer></script>
 </head>
 <body class="page-inscription">
 
@@ -98,11 +99,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <label for="email">Email :</label>
     <input id="email" name="email" placeholder="Votre email" required type="email"/>
 
-    <label for="password">Mot de passe :</label>
-    <input id="password" name="password" placeholder="Créer un mot de passe" required type="password"/>
+   <label for="password">Mot de passe :</label>
+<div style="position: relative;">
+  <input id="password" name="password" placeholder="Créer un mot de passe" required type="password" style="padding-right: 40px;" />
+  <span onclick="togglePassword('password')" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;">👁️</span>
+</div>
 
-    <label for="confirm-password">Confirmer le mot de passe :</label>
-    <input id="confirm-password" name="confirm-password" placeholder="Confirmez votre mot de passe" required type="password"/>
+<label for="confirm-password">Confirmer le mot de passe :</label>
+<div style="position: relative;">
+  <input id="confirm-password" name="confirm-password" placeholder="Confirmez votre mot de passe" required type="password" style="padding-right: 40px;" />
+  <span onclick="togglePassword('confirm-password')" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;">👁️</span>
+</div>
+
 
     <button class="btn-primary" type="submit">S'inscrire</button>
   </form>
