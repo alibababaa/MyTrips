@@ -85,18 +85,20 @@ if (isset($_GET['action'], $_GET['login'])) {
                 <td><?= htmlspecialchars($user['login']) ?></td>
                 <td><?= htmlspecialchars($user['role']) ?></td>
                 <td>
-                    <?php if ($user['login'] !== $_SESSION['user']['login']): ?>
-                        <?php if ($user['role'] === 'user'): ?>
-                            <a href="?action=vip&login=<?= urlencode($user['login']) ?>" class="btn-vip">VIP</a>
-                        <?php elseif ($user['role'] === 'vip'): ?>
-                            <a href="?action=removevip&login=<?= urlencode($user['login']) ?>" class="btn-remove-vip">Enlever VIP</a>
-                        <?php endif; ?>
-                        <?php if ($user['role'] !== 'banni'): ?>
-                            <a href="?action=ban&login=<?= urlencode($user['login']) ?>" class="btn-ban">Bannir</a>
-                        <?php endif; ?>
-                    <?php else: ?>
-                        <em>(vous)</em>
-                    <?php endif; ?>
+                   <?php if ($user['login'] !== $_SESSION['user']['login']): ?>
+    <?php if ($user['role'] === 'user'): ?>
+        <button class="simulate-update" data-role="vip" data-login="<?= $user['login'] ?>">VIP</button>
+        <button class="simulate-update" data-role="banni" data-login="<?= $user['login'] ?>">Bannir</button>
+    <?php elseif ($user['role'] === 'vip'): ?>
+        <button class="simulate-update" data-role="user" data-login="<?= $user['login'] ?>">Enlever VIP</button>
+        <button class="simulate-update" data-role="banni" data-login="<?= $user['login'] ?>">Bannir</button>
+    <?php elseif ($user['role'] !== 'banni'): ?>
+        <button class="simulate-update" data-role="banni" data-login="<?= $user['login'] ?>">Bannir</button>
+    <?php endif; ?>
+<?php else: ?>
+    <em>(vous)</em>
+<?php endif; ?>
+
                 </td>
             </tr>
         <?php endforeach; ?>
@@ -107,6 +109,6 @@ if (isset($_GET['action'], $_GET['login'])) {
 <footer>
     <p>© 2025 My Trips. Tous droits réservés.</p>
 </footer>
-
+<script src="simulateUpdate.js"></script>
 </body>
 </html>
