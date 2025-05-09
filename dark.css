@@ -241,4 +241,20 @@
     font-size: 0.9em;
     margin-top: 3em;
   }
-  
+  .password-container {
+    position: relative;
+}
+
+.password-container input {
+    padding-right: 35px;
+}
+.trip-card {
+  width: 260px;
+  margin: 1em;
+  text-align: center;
+  border-radius: 10px;
+  background-color: #ffd700;
+  padding: 1em;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  color: black; 
+}
