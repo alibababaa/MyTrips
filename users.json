@@ -40,5 +40,11 @@
         "password": "$2y$12$uPrUtHZu7YJAH5ujpLnEZ.x5q3fGtSzTIo2QH0gQQtcQa3O4jAjc.",
         "role": "user",
         "name": "Misa Amane"
+    },
+    {
+        "login": "agbotayann@gmail.com",
+        "password": "$2y$10$EF2k3Bwimsqyv7SNvmGg.eDNYBBEt3MgVPbjreOPvLT0iY7rxam92",
+        "name": "agbota yann",
+        "role": "admin"
     }
 ]
