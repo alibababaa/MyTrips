@@ -56,11 +56,11 @@ session_start();
         ['name' => 'Dassa', 'img' => 'https://expatstraveltogether.com/wp-content/uploads/2023/09/DIG16_view-hills-city-dassazoume-benin-450w-1301045479-scaled-1.jpg'],
         ['name' => 'Tanguiéta', 'img' => 'https://cenozo.org/wp-content/uploads/2021/03/Entree-du-Parc-National-de-la-Pendjari-a-Batia.jpg'],
         ['name' => 'Possotomé', 'img' => 'https://www.ecobenin.org/wp-content/uploads/Possotome_cocotier_plage_chez_prefet_pilotis_lac_aheme_ecotourisme_ecobenin_benin.jpg'],
-        ['name' => 'Cotonou', 'img' => 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Cotonou_View.jpg'],
-        ['name' => 'Boukombé', 'img' => 'https://upload.wikimedia.org/wikipedia/commons/4/4a/Boukomb%C3%A9_traditional_houses.jpg'],
-        ['name' => 'Dogbo', 'img' => 'https://upload.wikimedia.org/wikipedia/commons/b/b3/Dogbo_panorama.jpg'],
-        ['name' => 'Savalou', 'img' => 'https://upload.wikimedia.org/wikipedia/commons/9/9f/Savalou_Benin.jpg'],
-        ['name' => 'Kandi', 'img' => 'https://upload.wikimedia.org/wikipedia/commons/f/fd/Kandi_Benin.jpg']
+        ['name' => 'Cotonou', 'img' => 'https://prod.cdn-medias.jeuneafrique.com/medias/2020/10/22/45994hr_.jpg'],
+        ['name' => 'Boukombé', 'img' => 'https://www.gouv.bj/upload/thumbnails/articles/0611349001605591515.jpeg'],
+        ['name' => 'Dogbo', 'img' => 'https://ancb-benin.org/images/dogbo-79cc6.jpg'],
+        ['name' => 'Savalou', 'img' => 'https://static.wixstatic.com/media/76da4e_f844b208b74c4e889290b62e8b4b970c~mv2.jpg'],
+        ['name' => 'Kandi', 'img' => 'https://static.wixstatic.com/media/745c17_162837b3d5424f8a937f80f434b3f7e1~mv2.jpg/v1/fill/w_568,h_376,al_c,lg_1,q_80,enc_avif,quality_auto/745c17_162837b3d5424f8a937f80f434b3f7e1~mv2.jpg']
     ];
 
     foreach ($destinations as $destination) {
