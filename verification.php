@@ -8,7 +8,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $cvv        = $_POST['cvv'] ?? '';
     $tripId     = $_POST['trip_id'] ?? '';
 
-    // Vérifier les formats
     $isValid = preg_match('/^\d{16}$/', $cardNumber) &&
                preg_match('/^\d{2}\/\d{2}$/', $expiryDate) &&
                preg_match('/^\d{3}$/', $cvv) &&
@@ -16,14 +15,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                !empty($tripId);
 
     if ($isValid) {
-        header('Location: enregistrer_transaction.php?trip_id=' . urlencode($tripId));
+        $params = [
+            'trip_id' => $tripId,
+            'prix_total' => $_POST['prix_total'] ?? 0,
+            'nb_personnes' => $_POST['nb_personnes'] ?? 1,
+        ];
+
+        if (isset($_POST['options']) && is_array($_POST['options'])) {
+            foreach ($_POST['options'] as $opt) {
+                $params['options'][] = $opt;
+            }
+        }
+
+        $query = http_build_query($params);
+        header('Location: enregistrer_transaction.php?' . $query);
         exit;
     } else {
-        header('Location: erreurpaiement.php'); // Corrigé le nom de la page
+        header('Location: erreurpaiement.php');
         exit;
     }
 } else {
-    // Si la page est accédée directement
     header('Location: accueil.php');
-    exit;
+    exit();
 }
