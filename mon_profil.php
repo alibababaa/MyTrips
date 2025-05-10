@@ -1,5 +1,54 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 session_start();
+?>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mon Profil - My Trips</title>
+  <link id="theme-stylesheet" rel="stylesheet" href="my_trips.css">
+  <script src="theme.js" defer></script>
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap" rel="stylesheet"/>
+
+</head>
+<body class="page-accueil">
+  <nav>
+    <div class="logo">
+      <img alt="My Trips Logo" src="logo_my_trips.png"/>
+    </div>
+    <ul>
+      <li><a href="accueil.php">Accueil</a></li>
+      <li><a href="présentation.php">Présentation</a></li>
+      <li><a href="rechercher.php">Rechercher</a></li>
+      <?php if (isset($_SESSION['user'])): ?>
+        <li><a class="active" href="mon_profil.php">Mon Profil</a></li>
+        <li><a href="deconnexion.php">Se déconnecter</a></li>
+      <?php else: ?>
+        <li><a href="inscription.php">S'inscrire</a></li>
+        <li><a href="connexion.php">Se connecter</a></li>
+      <?php endif; ?>
+      <li><a class="btn-primary" href="reserver.php">Réserver</a></li>
+      <li><button id="themeToggle" class="btn-primary" style="background-color: transparent; color: #ffd700; border: 2px solid #ffd700;">🌓</button></li>
+    </ul>
+  </nav>
+
+  <header class="banner">
+    <div class="banner-content">
+      <h1>Mon espace personnel</h1>
+      <p>Gérez vos informations et réservations</p>
+      
+    </div>
+  </header>
+
+  <main>
+
+  <section>
+    <h2>Mes informations</h2>
+<?php
 
 if (!isset($_SESSION['user'])) {
     header("Location: connexion.php");
@@ -26,42 +75,23 @@ function findTripById($trips, $id) {
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <title>Mon Profil</title>
-    <link id="theme-stylesheet" rel="stylesheet" href="my_trips.css">
-    <script src="theme.js" defer></script>
-
-<style>
-    input.form-field {
-        transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    }
-    input.form-field:focus {
-        background-color: #ffffff;
-        box-shadow: 0 0 4px #0a9396;
-        outline: none;
-    }
-</style>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mon Profil - My Trips</title>
+  <link id="theme-stylesheet" rel="stylesheet" href="my_trips.css">
+  <script src="theme.js" defer></script>
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap" rel="stylesheet"/>
 
 </head>
 <body>
-<nav>
-    <ul>
-        <li><a href="accueil.php">Accueil</a></li>
-        <li><a href="rechercher.php">Rechercher</a></li>
-        <li><a href="confirmation.php">Mes Réservations</a></li>
-        <li><a href="deconnexion.php">Déconnexion</a></li>
-    </ul>
-</nav>
 
-<header class="banner">
-    <div class="banner-content">
-        <h1>Mes Réservations</h1>
-    </div>
-</header>
+
+
 
 <section class="profile-fields" style="max-width: 800px; margin: 2em auto;">
-    <h2>Mes informations</h2>
-    <form id="profil-form">
+    
+<form id="profil-form">
         <?php
         $utilisateur = $_SESSION['user'];
         $champs = ['login' => 'Identifiant', 'nom' => 'Nom', 'prenom' => 'Prénom', 'email' => 'Email'];
@@ -111,6 +141,15 @@ function annulerChamp(champ) {
 </script>
 
 
+
+
+
+</body>
+</html>
+  </section>
+
+  <section>
+    <h2>Mes réservations</h2>
 <section class="trip-summary" style="max-width: 800px; margin: auto;">
     <?php if (empty($userTrips)): ?>
         <p>Vous n'avez encore effectué aucune réservation.</p>
@@ -129,11 +168,13 @@ function annulerChamp(champ) {
     <?php endif; ?>
 </section>
 
-<footer>
-    <p>&copy; 2025 My Trips. Tous droits réservés.</p>
-</footer>
+    <!-- Contenu dynamique des réservations ici -->
+  </section>
+
+  </main>
+
+  <footer>
+    <p>© 2025 My Trips. Tous droits réservés.</p>
+  </footer>
 </body>
 </html>
-
-    
-        
