@@ -6,7 +6,6 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 
-// Charger les voyages
 function loadTrips() {
     $file = __DIR__ . '/trips.json';
     if (!file_exists($file)) return [];
@@ -19,8 +18,8 @@ if (!isset($_GET['trip_id'])) {
 
 $tripId = $_GET['trip_id'];
 $trips = loadTrips();
-
 $tripDetails = null;
+
 foreach ($trips as $trip) {
     if (isset($trip['id']) && $trip['id'] == $tripId) {
         $tripDetails = $trip;
@@ -67,16 +66,40 @@ if (!$tripDetails) {
         <img src="<?= htmlspecialchars($tripDetails['image']) ?>" alt="Image du voyage" style="width: 100%; max-height: 400px; object-fit: cover; border-radius: 10px; margin-bottom: 1em;">
     <?php endif; ?>
 
-    <p><strong>Prix :</strong> <?= htmlspecialchars($tripDetails['prix']) ?> €</p>
+    <p><strong>Prix de base :</strong> <?= htmlspecialchars($tripDetails['prix']) ?> €</p>
     <p><strong>Durée :</strong> <?= htmlspecialchars($tripDetails['duree']) ?> jours</p>
 
     <?php if (!empty($tripDetails['etapes']) && is_array($tripDetails['etapes'])): ?>
         <p><strong>Étapes :</strong> <?= htmlspecialchars(implode(', ', $tripDetails['etapes'])) ?></p>
     <?php endif; ?>
 
-    <form action="paiement.php" method="POST">
+    <form action="recapitulatif.php" method="POST">
         <input type="hidden" name="trip_id" value="<?= htmlspecialchars($tripDetails['id']) ?>">
-        <button class="btn-primary" type="submit">Réserver ce voyage</button>
+        <input type="hidden" name="prix_estime" id="prix_estime_input">
+
+        <label for="nb_personnes"><strong>Nombre de personnes :</strong></label>
+        <input type="number" id="nb_personnes" name="nb_personnes" value="1" min="1" required><br><br>
+
+        <?php if (!empty($tripDetails['etapes']) && is_array($tripDetails['etapes'])): ?>
+            <label><strong>Choisissez vos étapes (chacune +10 €) :</strong></label><br>
+            <?php foreach ($tripDetails['etapes'] as $etape): ?>
+                <input type="checkbox" name="etapes[]" value="<?= htmlspecialchars($etape) ?>" checked>
+                <?= htmlspecialchars($etape) ?> <br>
+            <?php endforeach; ?>
+        <?php endif; ?>
+
+        <br>
+        <label><strong>Options supplémentaires :</strong></label><br>
+        <input type="checkbox" name="options[]" value="assurance"> Assurance voyage (+20 €/pers)<br>
+        <input type="checkbox" name="options[]" value="bagage"> Bagage en soute (+30 €/pers)<br>
+        <input type="checkbox" name="options[]" value="guide"> Guide local (+50 €)<br>
+        <input type="checkbox" name="options[]" value="transport"> Transport privé (+100 €)<br>
+        <input type="checkbox" name="options[]" value="premium"> Hébergement premium (+40 €/pers)<br>
+
+        <br>
+        <p><strong>Prix estimé :</strong> <span id="prix-estime">0 €</span></p>
+
+        <button class="btn-primary" type="submit">Voir le récapitulatif</button>
     </form>
 
     <p style="margin-top: 1.5em;"><a href="reserver.php">← Retour aux voyages</a></p>
@@ -85,6 +108,45 @@ if (!$tripDetails) {
 <footer>
     <p>© 2025 My Trips. Tous droits réservés.</p>
 </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const nbPersonnesInput = document.getElementById('nb_personnes');
+    const checkboxesEtapes = document.querySelectorAll('input[name="etapes[]"]');
+    const checkboxesOptions = document.querySelectorAll('input[name="options[]"]');
+    const prixEstime = document.getElementById('prix-estime');
+    const prixBase = <?= json_encode((int)$tripDetails['prix']) ?>;
+    const prixParEtape = 10;
+
+    function calculerPrix() {
+        const nb = parseInt(nbPersonnesInput.value) || 1;
+        let total = prixBase * nb;
+
+        checkboxesEtapes.forEach(cb => {
+            if (cb.checked) total += prixParEtape;
+        });
+
+        checkboxesOptions.forEach(cb => {
+            if (cb.checked) {
+                if (cb.value === 'assurance') total += 20 * nb;
+                if (cb.value === 'bagage') total += 30 * nb;
+                if (cb.value === 'premium') total += 40 * nb;
+                if (cb.value === 'guide') total += 50;
+                if (cb.value === 'transport') total += 100;
+            }
+        });
+
+        prixEstime.textContent = total + " €";
+        document.getElementById('prix_estime_input').value = total;
+    }
+
+    nbPersonnesInput.addEventListener('input', calculerPrix);
+    checkboxesEtapes.forEach(cb => cb.addEventListener('change', calculerPrix));
+    checkboxesOptions.forEach(cb => cb.addEventListener('change', calculerPrix));
+
+    calculerPrix();
+});
+</script>
 
 </body>
 </html>
