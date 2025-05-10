@@ -20,7 +20,9 @@ function findTripById($trips, $id) {
 $selectedTrips = [];
 $tripIdsFromForm = $_POST['trip_ids'] ?? ($_POST['trip_id'] ?? null);
 
-// 📥 Récupération des voyages sélectionnés
+$nbPersonnes = isset($_POST['nb_personnes']) ? max(1, (int) $_POST['nb_personnes']) : 1;
+$optionsChoisies = isset($_POST['options']) && is_array($_POST['options']) ? $_POST['options'] : [];
+
 if (!empty($tripIdsFromForm)) {
     if (!is_array($tripIdsFromForm)) {
         $tripIdsFromForm = [$tripIdsFromForm];
@@ -40,9 +42,45 @@ if (!empty($tripIdsFromForm)) {
     exit("Erreur : Aucun voyage sélectionné.");
 }
 
-// 💳 Traitement du paiement
+// Calcul du prix total
+$prixTotal = 0;
+
+foreach ($selectedTrips as $trip) {
+    $prixBase = (int) $trip['prix'];
+    $prixVoyage = $prixBase * $nbPersonnes;
+
+    // Prix des options générales
+    foreach ($optionsChoisies as $option) {
+        switch ($option) {
+            case 'assurance':
+                $prixVoyage += 20 * $nbPersonnes;
+                break;
+            case 'bagage':
+                $prixVoyage += 30 * $nbPersonnes;
+                break;
+            case 'guide':
+                $prixVoyage += 50;
+                break;
+            case 'transport':
+                $prixVoyage += 100;
+                break;
+            case 'premium':
+                $prixVoyage += 40 * $nbPersonnes;
+                break;
+        }
+    }
+
+    $prixTotal += $prixVoyage;
+}
+
+// Traitement du paiement
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['card_number'], $_POST['card_owner'], $_POST['expiry_date'], $_POST['cvv'])) {
-    $paymentSuccessful = true; // Simulation
+    // Vérifie que le prix total est transmis
+    if ($prixTotal === null) {
+        exit("Erreur : prix total non fourni.");
+    }
+
+    $paymentSuccessful = true; // Simulation du paiement
 
     if ($paymentSuccessful) {
         $transactions_path = __DIR__ . '/transactions.json';
@@ -53,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['card_number'], $_POST
                 'user_id' => $_SESSION['user']['login'],
                 'trip_id' => $trip['id'],
                 'payment_date' => date('Y-m-d H:i:s'),
-                'montant' => $trip['prix']
+                'montant' => $prixTotal
             ];
         }
 
@@ -102,13 +140,56 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['card_number'], $_POST
 </header>
 
 <section class="trip-summary" style="max-width: 800px; margin: auto;">
-    <?php foreach ($selectedTrips as $trip): ?>
+    <?php 
+    foreach ($selectedTrips as $trip): 
+        $prixBase = (int) $trip['prix'];
+        $prixVoyage = $prixBase * $nbPersonnes;
+
+        // Calcul du prix total pour le voyage incluant les options
+        $prixOptions = 0;
+        if (!empty($optionsChoisies)) {
+            foreach ($optionsChoisies as $option) {
+                // On suppose que chaque option a un prix spécifique dans les données du voyage
+                if (isset($trip['options'][$option])) {
+                    $prixOptions += $trip['options'][$option]; // Ajout du prix de l'option choisie
+                }
+            }
+        }
+        $prixVoyage += $prixOptions;
+    ?>
         <div style="border: 1px solid #ddd; padding: 1em; margin: 1em 0; border-radius: 10px;">
             <h3><?= htmlspecialchars($trip['titre']) ?></h3>
             <p><strong>Durée :</strong> <?= htmlspecialchars($trip['duree']) ?> jours</p>
-            <p><strong>Prix :</strong> <?= htmlspecialchars($trip['prix']) ?> €</p>
+            <p><strong>Prix par personne :</strong> <?= htmlspecialchars($prixBase) ?> €</p>
+            <p><strong>Nombre de personnes :</strong> <?= htmlspecialchars($nbPersonnes) ?></p>
+            
+<p><strong>Options choisies :</strong>
+<?php
+if (empty($optionsChoisies)) {
+    echo "Aucune";
+} else {
+    $descriptions = [];
+    foreach ($optionsChoisies as $opt) {
+        switch ($opt) {
+            case 'assurance': $prix = 20 * $nbPersonnes; break;
+            case 'bagage': $prix = 30 * $nbPersonnes; break;
+            case 'guide': $prix = 50; break;
+            case 'transport': $prix = 100; break;
+            case 'premium': $prix = 40 * $nbPersonnes; break;
+            default: $prix = 0;
+        }
+        $descriptions[] = $opt . " (" . $prix . "€)";
+    }
+    echo implode(', ', $descriptions);
+}
+?>
+</p>
+
+            <p><strong>Prix total pour ce voyage :</strong> <?= number_format($prixVoyage, 2) ?> €</p>
         </div>
     <?php endforeach; ?>
+    
+    <h3>Prix Total à Payer : <?= number_format($prixTotal, 2) ?> €</h3>
 </section>
 
 <h2 style="text-align: center;">Formulaire de Paiement</h2>
@@ -131,6 +212,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['card_number'], $_POST
         <input type="hidden" name="trip_ids[]" value="<?= htmlspecialchars($trip['id']) ?>">
     <?php endforeach; ?>
 
+    <input type="hidden" name="prix_total" value="<?= htmlspecialchars($prixTotal) ?>">
+
     <button type="submit" class="btn-primary">Payer</button>
 </form>
 
@@ -139,3 +222,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['card_number'], $_POST
 </footer>
 </body>
 </html>
+
