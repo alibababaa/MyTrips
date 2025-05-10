@@ -1,23 +1,24 @@
 <?php
 session_start();
 
-// Vérifie que l'utilisateur est connecté
 if (!isset($_SESSION['user'])) {
     header("Location: connexion.php");
     exit();
 }
 
-// Vérifie que l'ID du voyage est passé
-if (!isset($_GET['trip_id'])) {
-    echo "Erreur : Aucun identifiant de voyage fourni.";
+if (!isset($_GET['trip_id'], $_GET['prix_total'])) {
+    echo "Erreur : données manquantes.";
     exit();
 }
 
 $tripId = $_GET['trip_id'];
+$prixTotal = (float) $_GET['prix_total'];
+$nbPersonnes = isset($_GET['nb_personnes']) ? (int) $_GET['nb_personnes'] : 1;
+$options = isset($_GET['options']) ? (array) $_GET['options'] : [];
+
 $userLogin = $_SESSION['user']['login'];
 $datePaiement = date('Y-m-d H:i:s');
 
-// Chargement des transactions existantes
 $transactionsFile = __DIR__ . '/transactions.json';
 $transactions = file_exists($transactionsFile)
     ? json_decode(file_get_contents($transactionsFile), true)
@@ -27,16 +28,15 @@ if (!is_array($transactions)) {
     $transactions = [];
 }
 
-// Ajout de la transaction
 $transactions[] = [
     'user_id' => $userLogin,
     'trip_id' => $tripId,
-    'payment_date' => $datePaiement
+    'payment_date' => $datePaiement,
+    'montant' => $prixTotal,
+    'nb_personnes' => $nbPersonnes,
+    'options' => $options
 ];
 
-// Sauvegarde dans le fichier
 file_put_contents($transactionsFile, json_encode($transactions, JSON_PRETTY_PRINT));
-
-// Redirection vers la confirmation
 header('Location: confirmation.php');
 exit();
