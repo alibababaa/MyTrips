@@ -45,5 +45,43 @@
         "trip_id": 11,
         "payment_date": "2025-05-08 20:18:34",
         "montant": 1060
+    },
+    {
+        "user_id": "light@gmail.com",
+        "trip_id": 2,
+        "payment_date": "2025-05-10 15:00:57",
+        "montant": 1100
+    },
+    {
+        "user_id": "light@gmail.com",
+        "trip_id": 1,
+        "payment_date": "2025-05-10 15:20:35",
+        "montant": 1050
+    },
+    {
+        "user_id": "light@gmail.com",
+        "trip_id": 1,
+        "payment_date": "2025-05-10 15:24:49",
+        "montant": 1050
+    },
+    {
+        "user_id": "light@gmail.com",
+        "trip_id": 1,
+        "payment_date": "2025-05-10 15:35:54",
+        "montant": 1050
+    },
+    {
+        "user_id": "light@gmail.com",
+        "trip_id": "10",
+        "payment_date": "2025-05-10 15:45:01",
+        "montant": 5510,
+        "nb_personnes": 4,
+        "options": [
+            "assurance",
+            "bagage",
+            "guide",
+            "transport",
+            "premium"
+        ]
     }
 ]
