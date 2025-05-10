@@ -96,11 +96,18 @@ function findTripById($trips, $id) {
             <?php foreach ($userTrips as $res): 
                 $trip = findTripById($trips, $res['trip_id']);
                 if (!$trip) continue;
+
+                $nbPersonnes = $res['nb_personnes'] ?? 1;
+                $options = $res['options'] ?? [];
             ?>
                 <div style="border: 1px solid #ccc; padding: 1em; margin-bottom: 1em;">
                     <p><strong>Voyage :</strong> <?= htmlspecialchars($trip['titre']) ?></p>
                     <p><strong>Durée :</strong> <?= htmlspecialchars($trip['duree']) ?> jours</p>
                     <p><strong>Date de paiement :</strong> <?= htmlspecialchars($res['payment_date']) ?></p>
+                    <p><strong>Nombre de personnes :</strong> <?= htmlspecialchars($nbPersonnes) ?></p>
+                    <p><strong>Options choisies :</strong>
+                        <?= empty($options) ? 'Aucune' : implode(', ', array_map('htmlspecialchars', $options)) ?>
+                    </p>
                     <p><strong>Montant payé :</strong> <?= number_format($res['montant'], 2) ?> €</p>
                 </div>
             <?php endforeach; ?>
