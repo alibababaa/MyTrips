@@ -13,7 +13,6 @@ $reservations = file_exists($reservationsPath) ? json_decode(file_get_contents($
 $trips = file_exists($tripsPath) ? json_decode(file_get_contents($tripsPath), true) : [];
 
 $userLogin = $_SESSION['user']['login'] ?? '';
-
 $userTrips = array_filter($reservations, fn($res) => $res['user_id'] === $userLogin);
 usort($userTrips, fn($a, $b) => strtotime($b['payment_date']) <=> strtotime($a['payment_date']));
 
@@ -31,53 +30,110 @@ function findTripById($trips, $id) {
     <title>Mon Profil</title>
     <link id="theme-stylesheet" rel="stylesheet" href="my_trips.css">
     <script src="theme.js" defer></script>
-</head>
-<body class="page-profil">
 
+<style>
+    input.form-field {
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    input.form-field:focus {
+        background-color: #ffffff;
+        box-shadow: 0 0 4px #0a9396;
+        outline: none;
+    }
+</style>
+
+</head>
+<body>
 <nav>
-    <div class="logo"><img src="logo_my_trips.png" alt="Logo My Trips"></div>
     <ul>
         <li><a href="accueil.php">Accueil</a></li>
-        <li><a href="présentation.php">Présentation</a></li>
         <li><a href="rechercher.php">Rechercher</a></li>
-        <li><a class="active" href="mon_profil.php">Mon Profil</a></li>
-        <li><a href="mon_panier.php">Mon Panier</a></li>
-        <li><a href="deconnexion.php">Se déconnecter</a></li>
-        <li>
-            <button id="themeToggle" class="btn-primary"
-                style="background-color: transparent; color: #ffd700; border: 2px solid #ffd700;">🌓</button>
-        </li>
+        <li><a href="confirmation.php">Mes Réservations</a></li>
+        <li><a href="deconnexion.php">Déconnexion</a></li>
     </ul>
 </nav>
 
 <header class="banner">
     <div class="banner-content">
-        <h1>Bienvenue, <?= htmlspecialchars($_SESSION['user']['name'] ?? $_SESSION['user']['login']) ?></h1>
-        <p>Voici l’historique de vos réservations</p>
+        <h1>Mes Réservations</h1>
     </div>
 </header>
 
-<section class="destinations" style="display: flex; flex-wrap: wrap; justify-content: center;">
-    <?php if (!empty($userTrips)): ?>
-        <?php foreach ($userTrips as $res):
-            $trip = findTripById($trips, $res['trip_id']);
-            if ($trip): ?>
-                <div class="destination-card">
-                    <img src="<?= htmlspecialchars($trip['image']) ?>" alt="<?= htmlspecialchars($trip['titre']) ?>">
-                    <h3><?= htmlspecialchars($trip['titre']) ?></h3>
-                    <p><strong>Durée :</strong> <?= htmlspecialchars($trip['duree']) ?> jours</p>
-                    <p><strong>Prix :</strong> <?= htmlspecialchars($trip['prix']) ?> €</p>
-                    <p><strong>Réservé le :</strong> <?= date('d/m/Y H:i', strtotime($res['payment_date'] ?? '')) ?></p>
-                </div>
-            <?php endif; ?>
+<section class="profile-fields" style="max-width: 800px; margin: 2em auto;">
+    <h2>Mes informations</h2>
+    <form id="profil-form">
+        <?php
+        $utilisateur = $_SESSION['user'];
+        $champs = ['login' => 'Identifiant', 'nom' => 'Nom', 'prenom' => 'Prénom', 'email' => 'Email'];
+        foreach ($champs as $champ => $label):
+            $valeur = htmlspecialchars($utilisateur[$champ] ?? '');
+        ?>
+        <div style="margin-bottom: 1em;">
+            <label><strong><?= $label ?> :</strong></label><br>
+            <input type="text" id="champ_<?= $champ ?>" value="<?= $valeur ?>" disabled class="form-field">
+            <button type="button" class="btn-primary" onclick="activerChamp('<?= $champ ?>')">✏️ Modifier</button>
+            <button type="button" class="btn-primary" onclick="validerChamp('<?= $champ ?>')" style="display:none;">✅ Valider</button>
+            <button type="button" class="btn-primary" onclick="annulerChamp('<?= $champ ?>')" style="display:none;">❌ Annuler</button>
+        </div>
         <?php endforeach; ?>
+    </form>
+</section>
+
+<script>
+function activerChamp(champ) {
+    const input = document.getElementById('champ_' + champ);
+    const buttons = input.parentElement.querySelectorAll('button');
+    input.disabled = false;
+    input.dataset.initial = input.value;
+    buttons[0].style.display = 'none';  // Modifier
+    buttons[1].style.display = 'inline'; // Valider
+    buttons[2].style.display = 'inline'; // Annuler
+}
+
+function validerChamp(champ) {
+    const input = document.getElementById('champ_' + champ);
+    input.disabled = true;
+    const buttons = input.parentElement.querySelectorAll('button');
+    buttons[0].style.display = 'inline'; // Modifier
+    buttons[1].style.display = 'none';   // Valider
+    buttons[2].style.display = 'none';   // Annuler
+}
+
+function annulerChamp(champ) {
+    const input = document.getElementById('champ_' + champ);
+    input.value = input.dataset.initial || input.value;
+    input.disabled = true;
+    const buttons = input.parentElement.querySelectorAll('button');
+    buttons[0].style.display = 'inline'; // Modifier
+    buttons[1].style.display = 'none';   // Valider
+    buttons[2].style.display = 'none';   // Annuler
+}
+</script>
+
+
+<section class="trip-summary" style="max-width: 800px; margin: auto;">
+    <?php if (empty($userTrips)): ?>
+        <p>Vous n'avez encore effectué aucune réservation.</p>
     <?php else: ?>
-        <p style="text-align: center;">Vous n'avez encore réservé aucun voyage.</p>
+        <?php foreach ($userTrips as $res): 
+            $trip = findTripById($trips, $res['trip_id']);
+            if (!$trip) continue;
+        ?>
+            <div style="border: 1px solid #ccc; padding: 1em; margin-bottom: 1em;">
+                <p><strong>Voyage :</strong> <?= htmlspecialchars($trip['titre']) ?></p>
+                <p><strong>Durée :</strong> <?= htmlspecialchars($trip['duree']) ?> jours</p>
+                <p><strong>Date de paiement :</strong> <?= htmlspecialchars($res['payment_date']) ?></p>
+                <p><strong>Montant payé :</strong> <?= number_format($res['montant'], 2) ?> €</p>
+            </div>
+        <?php endforeach; ?>
     <?php endif; ?>
 </section>
 
 <footer>
-    <p>© 2025 My Trips. Tous droits réservés.</p>
+    <p>&copy; 2025 My Trips. Tous droits réservés.</p>
 </footer>
 </body>
 </html>
+
+    
+        
