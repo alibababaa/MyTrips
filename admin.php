@@ -10,7 +10,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
 $usersFile = "users.json";
 $users = file_exists($usersFile) ? json_decode(file_get_contents($usersFile), true) : [];
 
-// 🔄 TRAITEMENT AJAX
+//  TRAITEMENT AJAX
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax'], $_POST['action'], $_POST['login'])) {
     sleep(3); // Simuler une latence serveur
 
