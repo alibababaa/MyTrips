@@ -53,16 +53,17 @@ if (!is_array($trips)) $trips = [];
                 <p><strong>Durée :</strong> <?= htmlspecialchars($trip['duree']) ?> jours</p>
                 <p><strong>Prix :</strong> <?= htmlspecialchars($trip['prix']) ?> €</p>
 
-               
-        <!-- Nouveau formulaire -->
-     <form action="trips_details.php" method="GET" style="margin-bottom: 0.5em;">
-    <input type="hidden" name="trip_id" value="<?= htmlspecialchars($trip['id']) ?>">
-    <button type="submit" class="btn-primary">Réserver ce voyage</button>
-</form>
-
-
-                <form action="ajouter_panier.php" method="GET">
+                <!-- Réserver ce voyage -->
+                <form action="trips_details.php" method="GET" style="margin-bottom: 0.5em;">
                     <input type="hidden" name="trip_id" value="<?= htmlspecialchars($trip['id']) ?>">
+                    <input type="hidden" name="mode" value="reserver">
+                    <button type="submit" class="btn-primary">Réserver ce voyage</button>
+                </form>
+
+                <!-- Ajouter au panier (passe aussi par trips_details.php) -->
+                <form action="trips_details.php" method="GET">
+                    <input type="hidden" name="trip_id" value="<?= htmlspecialchars($trip['id']) ?>">
+                    <input type="hidden" name="mode" value="panier">
                     <button type="submit" class="btn-primary" style="background-color: #444;">Ajouter au panier 🛒</button>
                 </form>
             </div>
