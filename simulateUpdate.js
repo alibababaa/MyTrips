@@ -6,38 +6,22 @@ document.addEventListener('DOMContentLoaded', function () {
             e.preventDefault();
 
             const targetRole = this.dataset.role;
-            const login = this.dataset.login;
             const row = this.closest('tr');
             const roleCell = row.querySelector('td:nth-child(3)');
             const originalText = this.textContent;
 
-            // Icône chargement + désactivation
-            this.innerHTML = '⏳';
+            // Désactiver le bouton et indiquer un chargement
+            this.textContent = '⏳ Mise à jour...';
             this.disabled = true;
+            this.style.opacity = 0.5;
 
-            fetch(`admin.php`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: `ajax=1&action=${encodeURIComponent(targetRole)}&login=${encodeURIComponent(login)}`
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    roleCell.textContent = data.newRole;
-                } else {
-                    alert("Erreur : " + data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Erreur AJAX :', error);
-                alert("Une erreur s'est produite.");
-            })
-            .finally(() => {
-                this.innerHTML = originalText;
+            // Attente simulée de 2 secondes
+            setTimeout(() => {
+                roleCell.textContent = targetRole;
+                this.textContent = originalText;
                 this.disabled = false;
-            });
+                this.style.opacity = 1;
+            }, 2000);
         });
     });
 });
