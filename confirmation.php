@@ -13,19 +13,32 @@ $tripsFile = __DIR__ . '/trips.json';
 $transactions = file_exists($transactionsFile) ? json_decode(file_get_contents($transactionsFile), true) : [];
 $trips = file_exists($tripsFile) ? json_decode(file_get_contents($tripsFile), true) : [];
 
-$latestPaymentTime = null;
-foreach (array_reverse($transactions) as $t) {
-    if ($t['user_id'] === $userLogin) {
-        $latestPaymentTime = $t['payment_date'];
-        break;
-    }
-}
-
+// Vérifie si un batch_id est passé dans l’URL
+$batchId = $_GET['batch'] ?? null;
 $userRecentTrips = [];
-if ($latestPaymentTime) {
+
+if ($batchId) {
     foreach ($transactions as $t) {
-        if ($t['user_id'] === $userLogin && $t['payment_date'] === $latestPaymentTime) {
+        if ($t['user_id'] === $userLogin && isset($t['batch_id']) && $t['batch_id'] === $batchId) {
             $userRecentTrips[] = $t;
+        }
+    }
+} else {
+    // Fallback : dernière date de paiement
+    $userTransactions = array_filter($transactions, function ($t) use ($userLogin) {
+        return $t['user_id'] === $userLogin;
+    });
+
+    usort($userTransactions, function ($a, $b) {
+        return strtotime($b['payment_date']) <=> strtotime($a['payment_date']);
+    });
+
+    if (!empty($userTransactions)) {
+        $latestDate = $userTransactions[0]['payment_date'];
+        foreach ($userTransactions as $t) {
+            if ($t['payment_date'] === $latestDate) {
+                $userRecentTrips[] = $t;
+            }
         }
     }
 }
@@ -74,7 +87,7 @@ function findTripTitle($trips, $id) {
         <ul style="list-style: none; padding: 0;">
             <?php foreach ($userRecentTrips as $t): ?>
                 <li style="margin: 1em 0; padding: 1em; border: 1px solid #ccc; border-radius: 10px;">
-                    ✅ <?= htmlspecialchars(findTripTitle($trips, $t['trip_id'])) ?> – <?= htmlspecialchars($t['montant']) ?> €<br>
+                    ✅ <?= htmlspecialchars(findTripTitle($trips, $t['trip_id'])) ?> – <?= number_format($t['montant'], 2, ',', ' ') ?> €<br>
                     <small>Réservé le <?= htmlspecialchars(date('d/m/Y H:i:s', strtotime($t['payment_date']))) ?></small>
                 </li>
             <?php endforeach; ?>
