@@ -46,5 +46,11 @@
         "password": "$2y$10$EF2k3Bwimsqyv7SNvmGg.eDNYBBEt3MgVPbjreOPvLT0iY7rxam92",
         "name": "agbota yann",
         "role": "admin"
+    },
+    {
+        "login": "ali@gmail.com",
+        "password": "$2y$10$eGzfDFvozGGmzDINVg1LeuBgVvyrTlQpVVMDBxaDNpS9Q4nCOvj52",
+        "name": "Ali",
+        "role": "user"
     }
 ]
