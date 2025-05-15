@@ -10,7 +10,37 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
 $usersFile = "users.json";
 $users = file_exists($usersFile) ? json_decode(file_get_contents($usersFile), true) : [];
 
-// Traitement des actions
+// 🔄 TRAITEMENT AJAX
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax'], $_POST['action'], $_POST['login'])) {
+    sleep(3); // Simuler une latence serveur
+
+    $action = $_POST['action'];
+    $login = $_POST['login'];
+    $newRole = null;
+
+    foreach ($users as &$user) {
+        if ($user['login'] === $login && $login !== $_SESSION['user']['login']) {
+            if ($action === 'vip') {
+                $user['role'] = 'vip';
+            } elseif ($action === 'removevip' || $action === 'user') {
+                $user['role'] = 'user';
+            } elseif ($action === 'banni') {
+                $user['role'] = 'banni';
+            }
+
+            $newRole = $user['role'];
+            file_put_contents($usersFile, json_encode($users, JSON_PRETTY_PRINT));
+
+            echo json_encode(['success' => true, 'newRole' => $newRole]);
+            exit();
+        }
+    }
+
+    echo json_encode(['success' => false, 'message' => 'Utilisateur introuvable ou action interdite.']);
+    exit();
+}
+
+// TRAITEMENT CLASSIQUE GET (fallback ou compatibilité)
 if (isset($_GET['action'], $_GET['login'])) {
     $action = $_GET['action'];
     $login = $_GET['login'];
@@ -29,7 +59,6 @@ if (isset($_GET['action'], $_GET['login'])) {
         }
     }
 
-    // Redirection pour éviter la répétition d'action au refresh
     header("Location: admin.php");
     exit();
 }
@@ -85,20 +114,19 @@ if (isset($_GET['action'], $_GET['login'])) {
                 <td><?= htmlspecialchars($user['login']) ?></td>
                 <td><?= htmlspecialchars($user['role']) ?></td>
                 <td>
-                   <?php if ($user['login'] !== $_SESSION['user']['login']): ?>
-    <?php if ($user['role'] === 'user'): ?>
-        <button class="simulate-update" data-role="vip" data-login="<?= $user['login'] ?>">VIP</button>
-        <button class="simulate-update" data-role="banni" data-login="<?= $user['login'] ?>">Bannir</button>
-    <?php elseif ($user['role'] === 'vip'): ?>
-        <button class="simulate-update" data-role="user" data-login="<?= $user['login'] ?>">Enlever VIP</button>
-        <button class="simulate-update" data-role="banni" data-login="<?= $user['login'] ?>">Bannir</button>
-    <?php elseif ($user['role'] !== 'banni'): ?>
-        <button class="simulate-update" data-role="banni" data-login="<?= $user['login'] ?>">Bannir</button>
-    <?php endif; ?>
-<?php else: ?>
-    <em>(vous)</em>
-<?php endif; ?>
-
+                    <?php if ($user['login'] !== $_SESSION['user']['login']): ?>
+                        <?php if ($user['role'] === 'user'): ?>
+                            <button class="simulate-update" data-role="vip" data-login="<?= $user['login'] ?>">VIP</button>
+                            <button class="simulate-update" data-role="banni" data-login="<?= $user['login'] ?>">Bannir</button>
+                        <?php elseif ($user['role'] === 'vip'): ?>
+                            <button class="simulate-update" data-role="user" data-login="<?= $user['login'] ?>">Enlever VIP</button>
+                            <button class="simulate-update" data-role="banni" data-login="<?= $user['login'] ?>">Bannir</button>
+                        <?php elseif ($user['role'] !== 'banni'): ?>
+                            <button class="simulate-update" data-role="banni" data-login="<?= $user['login'] ?>">Bannir</button>
+                        <?php endif; ?>
+                    <?php else: ?>
+                        <em>(vous)</em>
+                    <?php endif; ?>
                 </td>
             </tr>
         <?php endforeach; ?>
