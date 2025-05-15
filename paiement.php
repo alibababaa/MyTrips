@@ -19,6 +19,11 @@ $nbPersonnes = $_POST['nb_personnes'] ?? 1;
 $prixTotal = $_POST['prix_total'] ?? 0;
 $optionsChoisies = $_POST['options'] ?? [];
 
+$hebergement = $_POST['hebergement'] ?? '';
+$repas = $_POST['repas'] ?? '';
+$activites = $_POST['activites'] ?? '';
+$etapes = $_POST['etapes'] ?? [];
+
 $selectedTrip = findTripById($trips, $tripId);
 
 if (!$selectedTrip) {
@@ -60,10 +65,16 @@ if (!$selectedTrip) {
         <h3><?= htmlspecialchars($selectedTrip['titre']) ?></h3>
         <p><strong>Durée :</strong> <?= htmlspecialchars($selectedTrip['duree']) ?> jours</p>
         <p><strong>Nombre de personnes :</strong> <?= htmlspecialchars($nbPersonnes) ?></p>
+        <p><strong>Hébergement :</strong> <?= htmlspecialchars($hebergement ?: 'Non spécifié') ?></p>
+        <p><strong>Repas :</strong> <?= htmlspecialchars($repas ?: 'Non spécifié') ?></p>
+        <p><strong>Activités :</strong> <?= htmlspecialchars($activites ?: 'Non spécifié') ?></p>
+        <?php if (!empty($etapes)): ?>
+            <p><strong>Étapes :</strong> <?= htmlspecialchars(implode(', ', $etapes)) ?></p>
+        <?php endif; ?>
         <p><strong>Options choisies :</strong>
             <?= empty($optionsChoisies) ? 'Aucune' : implode(', ', array_map('htmlspecialchars', $optionsChoisies)) ?>
         </p>
-        <p><strong>Prix total :</strong> <?= number_format($prixTotal, 2) ?> €</p>
+        <p><strong>Prix total :</strong> <?= number_format($prixTotal, 2, ',', ' ') ?> €</p>
     </div>
 </section>
 
@@ -85,10 +96,17 @@ if (!$selectedTrip) {
     <input type="hidden" name="trip_id" value="<?= htmlspecialchars($tripId) ?>">
     <input type="hidden" name="nb_personnes" value="<?= htmlspecialchars($nbPersonnes) ?>">
     <input type="hidden" name="prix_total" value="<?= htmlspecialchars($prixTotal) ?>">
-
-    <?php foreach ($optionsChoisies as $opt): ?>
-        <input type="hidden" name="options[]" value="<?= htmlspecialchars($opt) ?>">
-    <?php endforeach; ?>
+    <input type="hidden" name="hebergement" value="<?= htmlspecialchars($hebergement) ?>">
+    <input type="hidden" name="repas" value="<?= htmlspecialchars($repas) ?>">
+    <input type="hidden" name="activites" value="<?= htmlspecialchars($activites) ?>">
+    <?php
+    foreach ($etapes as $etape) {
+        echo '<input type="hidden" name="etapes[]" value="' . htmlspecialchars($etape) . '">';
+    }
+    foreach ($optionsChoisies as $opt) {
+        echo '<input type="hidden" name="options[]" value="' . htmlspecialchars($opt) . '">';
+    }
+    ?>
 
     <button type="submit" class="btn-primary">Payer</button>
 </form>
