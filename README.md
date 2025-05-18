@@ -1,6 +1,6 @@
 # My Trips – Projet Agence de Voyage
 
-Bienvenue sur *My Trips*, une plateforme web de réservation de séjours "pseudo-sur-mesure", réalisée dans le cadre du projet universitaire d'informatique 4.
+Bienvenue sur *My Trips*, une plateforme web de réservation de séjours "pseudo-sur-mesure" au Bénin, réalisée dans le cadre du projet académique d'informatique 4.
 
 ## 🛠️ Technologies utilisées
 - HTML5 / CSS3
